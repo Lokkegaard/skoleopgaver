@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mysteriet om 4.C - Tarup Skole</title>
+    <style>
+        :root {
+            --bg-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --accent: #e67e22; /* Orange */
+            --modal-bg: rgba(0, 0, 0, 0.95);
+            --clue-color: #27ae60; /* Grøn */
+            --decoy-color: #c0392b; /* Rød */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* --- START SKÆRM --- */
+        #start-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #2c3e50, #000);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .intro-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            max-width: 600px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 20px;
+        }
+
+        .intro-box h2 { margin-top: 0; color: var(--accent); }
+        .intro-box li { margin-bottom: 8px; }
+
+        /* --- SPIL CONTAINER --- */
+        #game-container {
+            display: none;
+            width: 98%;
+            max-width: 1000px;
+            height: 95vh;
+            background: #34495e;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: #2c3e50;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #1a1a1a;
+            height: 40px;
+            flex-shrink: 0;
+        }
+
+        /* Scene Area */
+        .scene-area {
+            position: relative;
+            width: 100%;
+            flex-grow: 1;
+            background-color: #95a5a6;
+            border-bottom: 15px solid #7f8c8d;
+            overflow: hidden;
+        }
+
+        /* Story Box */
+        .story-box {
+            height: 35%; 
+            min-height: 160px;
+            padding: 20px;
+            background: #2c3e50;
+            border-top: 4px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        #story {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 800px;
+            text-align: center;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* --- UI ELEMENTER --- */
+        button.start-btn {
+            background-color: var(--accent);
+            color: white;
+            border: 3px solid white;
+            padding: 15px 50px;
+            font-size: 1.4rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(230, 126, 34, 0.8);
+            animation: pulse-btn 2s infinite;
+        }
+        button.start-btn:hover { background-color: white; color: var(--accent); transform: scale(1.05); }
+
+        button.btn {
+            background: var(--accent); color: white; border: none;
+            padding: 10px 30px; font-size: 1.1rem; border-radius: 8px;
+            cursor: pointer; margin-top: 5px; flex-shrink: 0;
+        }
+
+        .slider-container { margin-bottom: 20px; text-align: center; }
+        input[type=range] { width: 200px; accent-color: var(--accent); cursor: pointer; }
+
+        /* --- EMOJIS --- */
+        .game-object {
+            position: absolute;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.4));
+            user-select: none;
+        }
+        .game-object:hover { transform: scale(1.2); z-index: 10; }
+        
+        .game-object.found-clue {
+            opacity: 1; pointer-events: none; filter: drop-shadow(0 0 15px var(--clue-color));
+        }
+        .game-object.found-clue::after { content: '✅'; position: absolute; font-size: 1.5rem; top: -5px; right: -5px; }
+
+        .game-object.solved-decoy {
+            opacity: 0.3; filter: grayscale(100%); pointer-events: none; transform: scale(0.8);
+        }
+        .game-object.solved-decoy::after { content: '❌'; position: absolute; font-size: 1.5rem; top: 5px; left: 5px; }
+
+        /* --- POPUP --- */
+        #math-modal {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--modal-bg);
+            display: none;
+            justify-content: center; align-items: center; z-index: 50;
+        }
+
+        .modal-content {
+            background: white; color: #333; padding: 30px;
+            border-radius: 15px; text-align: center; width: 90%; max-width: 450px;
+        }
+
+        input.math-input {
+            font-size: 2rem; width: 140px; text-align: center;
+            padding: 8px; margin: 15px 0; border: 2px solid #333; border-radius: 10px;
+        }
+
+        #next-btn { display: none; background: var(--clue-color); }
+
+        /* Animationer */
+        @keyframes pulse-btn { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .hint-active { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(230, 126, 34, 0)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px rgba(230, 126, 34, 0.8)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(230, 126, 34, 0)); }
+        }
+        
+        /* Media Queries */
+        @media (max-height: 600px) {
+            h1 { font-size: 1.5rem; margin: 10px 0; }
+            .intro-box { padding: 10px; font-size: 0.9rem; }
+            .game-object { font-size: 2.5rem; }
+            .story-box { height: 40%; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <h1>🏫 Mysteriet om 4.C</h1>
+        
+        <div class="intro-box">
+            <h2>Velkommen til Det Gamle Hus!</h2>
+            <p>Døren er smækket i bag jer! For at komme tilbage til Tarup Skole før det ringer ind, skal I bruge jeres hjerner.</p>
+            <p><strong>REGLER FOR DETEKTIVER:</strong></p>
+            <ul>
+                <li><strong>LÆS:</strong> Historien i bunden fortæller jer, hvad I skal lede efter.</li>
+                <li><strong>TÆNK:</strong> Tingene nævnes ikke ved navn! I skal gætte dem ud fra beskrivelsen (f.eks. "noget med blade der ikke er et træ" = en bog).</li>
+                <li><strong>REGN:</strong> Når I klikker på en ting, skal I løse et regnestykke.</li>
+                <li><strong>VIGTIGT:</strong> Kun de 3 rigtige spor låser døren op. De andre ting er bare fælder!</li>
+            </ul>
+        </div>
+        
+        <div class="slider-container">
+            <label style="display:block; margin-bottom: 5px;">Vælg sværhedsgrad:</label>
+            <input type="range" id="diff-slider" min="1" max="5" value="3">
+            <p id="diff-text" style="color:var(--accent); font-weight:bold; margin: 5px 0 0 0;">Øvet</p>
+        </div>
+        
+        <button id="start-button" class="start-btn">START SPILLET</button>
+    </div>
+
+    <div id="game-container">
+        <div class="top-bar">
+            <span>📍 <span id="room-name">Rum</span></span>
+            <span>🔑 Spor Fundet: <span id="score">0</span>/3</span>
+        </div>
+
+        <div class="scene-area" id="scene"></div>
+
+        <div id="math-modal">
+            <div class="modal-content">
+                <h3 style="color:#7f8c8d; text-transform: uppercase; margin: 0;">Løs opgaven</h3>
+                <h1 id="math-question" style="font-size: 3rem; margin: 10px 0;">2 + 2</h1>
+                <input type="number" id="math-answer" class="math-input" placeholder="?">
+                <br>
+                <button id="check-btn" class="btn">Tjek Svar</button>
+                <p id="feedback" style="height:20px; font-weight:bold; margin-top:10px; font-size: 1rem;"></p>
+            </div>
+        </div>
+
+        <div class="story-box">
+            <div id="story">...</div>
+            <button id="next-btn" class="btn">Gå til næste rum ➡</button>
+        </div>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const startBtn = document.getElementById('start-button');
+        const checkBtn = document.getElementById('check-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const diffSlider = document.getElementById('diff-slider');
+        const mathInput = document.getElementById('math-answer');
+
+        startBtn.addEventListener('click', startGame);
+        checkBtn.addEventListener('click', checkAnswer);
+        nextBtn.addEventListener('click', nextLevel);
+        
+        diffSlider.addEventListener('input', function() {
+            let val = parseInt(this.value);
+            let txt = ["Nybegynder", "Let Øvet", "Øvet", "Ekspert", "Geni"];
+            document.getElementById('diff-text').innerText = txt[val-1];
+        });
+
+        mathInput.addEventListener('keypress', function(e) {
+            if (e.key === "Enter") checkAnswer();
+        });
+
+        // --- HISTORIE & GÅDER ---
+        const levels = [
+            {
+                name: "Den Mørke Entré",
+                bg: "#bdc3c7",
+                // Clues: Frakke (vådt tøj), Dørmåtte (tørre sko), Billede (ansigt på væggen)
+                text: "Velkommen indenfor, 4.C. Døren er låst. Professoren kom lige ind fra regnen, så han var drivvåd. Det første spor er gemt i det, han tog af sig for ikke at fryse, men som nu hænger og drypper. Hvis nøglen ikke er der, så kig der, hvor man tørrer sine beskidte sko af, inden man går videre. Det sidste spor gemmer sig bag det ansigt, der hænger på væggen og kigger på jer, men aldrig siger noget.",
+                objects: [
+                    { icon: "🧥", name: "Frakke", t: 30, l: 20, isClue: true }, 
+                    { icon: "👣", name: "Dørmåtte", t: 80, l: 45, isClue: true }, 
+                    { icon: "🖼️", name: "Billede", t: 20, l: 70, isClue: true }, 
+                    // Falske
+                    { icon: "☂️", name: "Paraply", t: 60, l: 10, isClue: false },
+                    { icon: "👞", name: "Sko", t: 82, l: 25, isClue: false },
+                    { icon: "🧢", name: "Hat", t: 25, l: 10, isClue: false },
+                    { icon: "🔑", name: "Nøgle", t: 50, l: 50, isClue: false }, 
+                    { icon: "🪴", name: "Plante", t: 70, l: 85, isClue: false },
+                    { icon: "🪞", name: "Spejl", t: 30, l: 90, isClue: false },
+                    { icon: "🎒", name: "Taske", t: 75, l: 5, isClue: false }
+                ]
+            },
+            {
+                name: "Det Gamle Køkken",
+                bg: "#f1c40f",
+                // Clues: Ovn (varmer mad), Køleskab (koldt), Tallerken (spiser af)
+                text: "Nu er vi i køkkenet. Vi skal finde tre ting for at komme videre. Den første ting bruger man til at gøre maden meget varm og sprød, så pas på nallerne! Den anden ting er lige det modsatte; det er her, mælken og smørret bor for ikke at blive surt. Den sidste ting er flad og rund, og det er den, man lægger sin aftensmad på, når man skal spise.",
+                objects: [
+                    { icon: "🔥", name: "Ovn", t: 60, l: 10, isClue: true }, 
+                    { icon: "🧊", name: "Køleskab", t: 30, l: 80, isClue: true }, 
+                    { icon: "🍽️", name: "Tallerken", t: 65, l: 50, isClue: true }, 
+                    // Falske
+                    { icon: "🍎", name: "Æble", t: 55, l: 40, isClue: false },
+                    { icon: "🍌", name: "Banan", t: 58, l: 45, isClue: false },
+                    { icon: "🔪", name: "Kniv", t: 52, l: 60, isClue: false },
+                    { icon: "🥣", name: "Gryde", t: 48, l: 15, isClue: false },
+                    { icon: "🍕", name: "Pizza", t: 60, l: 30, isClue: false },
+                    { icon: "🥤", name: "Kop", t: 50, l: 70, isClue: false },
+                    { icon: "🗑️", name: "Skrald", t: 80, l: 5, isClue: false }
+                ]
+            },
+            {
+                name: "Det Støvede Bibliotek",
+                bg: "#8e44ad",
+                // Clues: Bøger (blade/ikke træ), Lampe (kunstig sol), Arkiv (Alfabetet)
+                text: "Herinde er der stille. Start med at finde det, der har tusindvis af blade, men som slet ikke er et træ. Det er lidt mørkt i hjørnet, så I får brug for den kunstige sol, der står på skrivebordet. Til sidst skal I lede efter professorens papirer. De ligger gemt i det store metalskab med skuffer, hvor alt er sorteret i alfabetisk rækkefølge.",
+                objects: [
+                    { icon: "📚", name: "Bøger", t: 40, l: 15, isClue: true }, 
+                    { icon: "💡", name: "Lampe", t: 20, l: 50, isClue: true }, 
+                    { icon: "🗄️", name: "Arkiv", t: 60, l: 80, isClue: true }, 
+                    // Falske
+                    { icon: "👓", name: "Briller", t: 60, l: 40, isClue: false },
+                    { icon: "💻", name: "Computer", t: 55, l: 50, isClue: false },
+                    { icon: "✏️", name: "Blyant", t: 62, l: 60, isClue: false },
+                    { icon: "🗞️", name: "Avis", t: 70, l: 25, isClue: false },
+                    { icon: "🪑", name: "Stol", t: 65, l: 5, isClue: false },
+                    { icon: "🕰️", name: "Ur", t: 10, l: 80, isClue: false },
+                    { icon: "✂️", name: "Saks", t: 58, l: 30, isClue: false }
+                ]
+            },
+            {
+                name: "Pedellens Kælder",
+                bg: "#2c3e50",
+                // Clues: Rør (transporterer vand), Værktøj (kasse til reparation), Lygte (bærbart lys)
+                text: "Det drypper fra loftet! I må hellere undersøge de lange metalting, som transporterer vandet rundt i huset. For at reparere lækagen, skal I finde den tunge kasse, der er fyldt med hammer og skruetrækker. Her er sort som kul, så I kan ikke se noget, medmindre I finder den lille ting, man kan tage med i hånden for at lyse op.",
+                objects: [
+                    { icon: "🚰", name: "Rør", t: 10, l: 30, isClue: true }, 
+                    { icon: "🧰", name: "Værktøj", t: 70, l: 10, isClue: true }, 
+                    { icon: "🔦", name: "Lygte", t: 50, l: 80, isClue: true }, 
+                    // Falske
+                    { icon: "🕷️", name: "Edderkop", t: 20, l: 80, isClue: false },
+                    { icon: "📦", name: "Kasse", t: 65, l: 40, isClue: false },
+                    { icon: "🐁", name: "Mus", t: 80, l: 60, isClue: false },
+                    { icon: "🪜", name: "Stige", t: 30, l: 10, isClue: false },
+                    { icon: "🔋", name: "Batteri", t: 60, l: 70, isClue: false },
+                    { icon: "🧹", name: "Kost", t: 40, l: 90, isClue: false },
+                    { icon: "🛢️", name: "Tønde", t: 65, l: 90, isClue: false }
+                ]
+            },
+            {
+                name: "Udsigten fra Loftet",
+                bg: "#e67e22",
+                // Clues: Vindue (gennemsigtigt), Bamse (blød ven), Kiste (skat)
+                text: "Vi er oppe under taget. Her er indelukket, så find det af glas, man kan åbne for at få frisk luft og se skolen. Her er ensomt, så find den bløde, gamle ven, man kan kramme, når man skal sove. Til sidst... midt i rummet står målet! Find den store beholder af træ med det buede låg, hvor sørøvere plejer at gemme deres guld.",
+                objects: [
+                    { icon: "🪟", name: "Vindue", t: 15, l: 40, isClue: true }, 
+                    { icon: "🧸", name: "Bamse", t: 60, l: 70, isClue: true }, 
+                    { icon: "💎", name: "Kiste", t: 60, l: 20, isClue: true }, 
+                    // Falske
+                    { icon: "👻", name: "Spøgelse", t: 10, l: 80, isClue: false },
+                    { icon: "⚽", name: "Bold", t: 80, l: 50, isClue: false },
+                    { icon: "🎸", name: "Guitar", t: 50, l: 5, isClue: false },
+                    { icon: "🧳", name: "Kuffert", t: 70, l: 10, isClue: false },
+                    { icon: "🦇", name: "Flagermus", t: 5, l: 10, isClue: false },
+                    { icon: "⭐", name: "Stjerne", t: 20, l: 90, isClue: false },
+                    { icon: "🎩", name: "Høj Hat", t: 40, l: 55, isClue: false }
+                ]
+            }
+        ];
+
+        let currentLevel = 0;
+        let foundCount = 0;
+        let difficulty = 3;
+        let currentAnswer = 0;
+        let activeObject = null;
+        let activeElement = null;
+        let hintTimer = null;
+
+        function startGame() {
+            difficulty = parseInt(diffSlider.value);
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('game-container').style.display = 'flex';
+            loadLevel(0);
+        }
+
+        function loadLevel(idx) {
+            if (idx >= levels.length) {
+                alert("Sådan 4.C! I klarede alle rummene og nåede tilbage til frikvarteret!");
+                location.reload();
+                return;
+            }
+            currentLevel = idx;
+            foundCount = 0;
+            let lvl = levels[idx];
+
+            document.getElementById('room-name').innerText = lvl.name;
+            document.getElementById('score').innerText = "0";
+            document.getElementById('next-btn').style.display = "none";
+            document.getElementById('scene').style.backgroundColor = lvl.bg;
+            document.getElementById('story').innerText = lvl.text;
+
+            let scene = document.getElementById('scene');
+            scene.innerHTML = "";
+            
+            lvl.objects.forEach(obj => {
+                let el = document.createElement('div');
+                el.className = 'game-object';
+                el.innerText = obj.icon;
+                el.style.top = obj.t + "%";
+                el.style.left = obj.l + "%";
+                el.dataset.isClue = obj.isClue;
+                el.onclick = function() { objectClicked(el, obj); };
+                scene.appendChild(el);
+            });
+
+            startHintTimer();
+        }
+
+        function startHintTimer() {
+            clearTimeout(hintTimer);
+            hintTimer = setTimeout(() => {
+                let clues = document.querySelectorAll('.game-object');
+                clues.forEach(el => {
+                    if(el.dataset.isClue === "true" && !el.classList.contains('found-clue')) {
+                        el.classList.add('hint-active');
+                    }
+                });
+            }, 30000); 
+        }
+
+        function objectClicked(el, objData) {
+            if (el.classList.contains('found-clue') || el.classList.contains('solved-decoy')) return;
+            
+            activeElement = el;
+            activeObject = objData;
+            generateMath();
+            
+            document.getElementById('math-modal').style.display = 'flex';
+            document.getElementById('math-answer').value = '';
+            document.getElementById('math-answer').focus();
+            document.getElementById('feedback').innerText = '';
+        }
+
+        function generateMath() {
+            let q = "", a = 0;
+            let r = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+            if (difficulty == 1) { 
+                let x = r(1,10), y = r(1,10); q = `${x} + ${y}`; a = x+y;
+            } else if (difficulty == 2) { 
+                let x = r(2,5), y = r(2,10); q = `${x} • ${y}`; a = x*y;
+            } else if (difficulty == 3) { 
+                let t = r(1,3);
+                if (t == 1) { let x=r(20,100), y=r(10,50); q=`${x} + ${y}`; a=x+y; }
+                else if (t == 2) { let x=r(50,100), y=r(10,40); q=`${x} - ${y}`; a=x-y; }
+                else { let x=r(4,9), y=r(4,9); q=`${x} • ${y}`; a=x*y; }
+            } else if (difficulty == 4) { 
+                let x=r(2,5), y=r(3,8), z=r(2,5); q=`${x} • (${y} + ${z})`; a=x*(y+z);
+            } else { 
+                let x=r(11,19), y=r(3,9); q=`${x} • ${y}`; a=x*y;
+            }
+
+            document.getElementById('math-question').innerText = q;
+            currentAnswer = a;
+        }
+
+        function checkAnswer() {
+            let val = parseInt(document.getElementById('math-answer').value);
+            let feedback = document.getElementById('feedback');
+
+            if (val === currentAnswer) {
+                document.getElementById('math-modal').style.display = 'none';
+                activeElement.classList.remove('hint-active');
+
+                if (activeObject.isClue) {
+                    activeElement.classList.add('found-clue');
+                    foundCount++;
+                    document.getElementById('score').innerText = foundCount;
+                    if (foundCount >= 3) {
+                        document.getElementById('next-btn').style.display = 'block';
+                    }
+                } else {
+                    activeElement.classList.add('solved-decoy');
+                    // Ingen alert box mere, bare visuel feedback (kryds)
+                    alert("Regnestykket var rigtigt!\nMEN... det var ikke det spor, teksten beskrev. Prøv igen!");
+                }
+            } else {
+                feedback.innerText = "Det var desværre forkert.";
+                feedback.style.color = "#e74c3c";
+            }
+        }
+
+        function nextLevel() {
+            loadLevel(currentLevel + 1);
+        }
+    });
+</script>
+
+</body>
+</html>

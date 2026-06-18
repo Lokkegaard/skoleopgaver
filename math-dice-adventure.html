@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Dice Adventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4a47a3;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4a47a3;
+        }
+
+        .dice-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .dice {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .dice:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+
+        .dice.selected {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            transform: scale(1.1);
+        }
+
+        .operation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .op-btn {
+            padding: 10px 20px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #ffd93d, #ff6b35);
+        }
+
+        .op-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .op-btn.selected {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+        }
+
+        .problem {
+            font-size: 2rem;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            border-radius: 15px;
+            color: #333;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-area {
+            margin: 20px 0;
+        }
+
+        .answer-input {
+            font-size: 1.5rem;
+            padding: 15px;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            width: 200px;
+            text-align: center;
+            margin: 0 10px;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #4a47a3;
+            box-shadow: 0 0 10px rgba(74, 71, 163, 0.3);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            color: white;
+            margin: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f, #a8e6cf);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff416c, #ff4757);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .feedback {
+            font-size: 1.3rem;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .correct {
+            background: linear-gradient(135deg, #a8e6cf, #dcedc1);
+            color: #27ae60;
+        }
+
+        .incorrect {
+            background: linear-gradient(135deg, #ffd3d3, #ffb3b3);
+            color: #e74c3c;
+        }
+
+        .rewards {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .reward {
+            font-size: 2rem;
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .level-up {
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 1.5rem;
+            font-weight: bold;
+            animation: pulse 1s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .instructions {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🎲 Math Dice Adventure 🎲</h1>
+        
+        <div class="stats">
+            <div class="stat">
+                <div>Level</div>
+                <div class="stat-value" id="level">1</div>
+            </div>
+            <div class="stat">
+                <div>Score</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat">
+                <div>Streak</div>
+                <div class="stat-value" id="streak">0</div>
+            </div>
+            <div class="stat">
+                <div>Problems Solved</div>
+                <div class="stat-value" id="problems-solved">0</div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            🎯 Select two numbers from the dice, choose an operation (+, -, ×, ÷), then solve the problem!
+            <br>🌟 Get 5 problems right to level up and earn more dice!
+        </div>
+
+        <div class="dice-container" id="dice-container">
+            <!-- Dice will be generated here -->
+        </div>
+
+        <div class="operation-buttons">
+            <button class="op-btn" data-op="+" title="Addition">+</button>
+            <button class="op-btn" data-op="-" title="Subtraction">-</button>
+            <button class="op-btn" data-op="*" title="Multiplication">×</button>
+            <button class="op-btn" data-op="/" title="Division">÷</button>
+        </div>
+
+        <div class="problem" id="problem">
+            Select two dice and an operation to create a math problem!
+        </div>
+
+        <div class="input-area">
+            <input type="number" class="answer-input" id="answer-input" placeholder="Your answer" disabled>
+            <button class="btn btn-primary" id="submit-btn" disabled>Submit Answer</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="rewards" id="rewards"></div>
+
+        <button class="btn btn-success" id="new-problem-btn" onclick="generateNewDiceValues()">🎲 Roll New Dice</button>
+    </div>
+
+    <script>
+        let gameState = {
+            level: 1,
+            score: 0,
+            streak: 0,
+            problemsSolved: 0,
+            selectedDice: [],
+            selectedOperation: null,
+            currentProblem: null,
+            diceCount: 2,
+            diceValues: []
+        };
+
+        const rewards = ['🌟', '⭐', '💫', '✨', '🎉', '🏆', '👏', '🎊'];
+
+        function initGame() {
+            generateDiceValues();
+            updateDisplay();
+        }
+
+        function generateDiceValues() {
+            gameState.diceValues = [];
+            for (let i = 0; i < gameState.diceCount; i++) {
+                gameState.diceValues.push(Math.floor(Math.random() * 6) + 1);
+            }
+            renderDice();
+            resetSelection();
+        }
+
+        function renderDice() {
+            const container = document.getElementById('dice-container');
+            container.innerHTML = '';
+            
+            gameState.diceValues.forEach((value, index) => {
+                const dice = document.createElement('div');
+                dice.className = 'dice';
+                dice.textContent = value;
+                dice.onclick = () => selectDice(index);
+                dice.dataset.index = index;
+                container.appendChild(dice);
+            });
+        }
+
+        function selectDice(index) {
+            const dice = document.querySelector(`[data-index="${index}"]`);
+            
+            if (gameState.selectedDice.includes(index)) {
+                // Deselect
+                gameState.selectedDice = gameState.selectedDice.filter(i => i !== index);
+                dice.classList.remove('selected');
+            } else if (gameState.selectedDice.length < 2) {
+                // Select
+                gameState.selectedDice.push(index);
+                dice.classList.add('selected');
+            }
+            
+            updateProblem();
+        }
+
+        function selectOperation(op) {
+            document.querySelectorAll('.op-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+            gameState.selectedOperation = op;
+            updateProblem();
+        }
+
+        function updateProblem() {
+            const problemDiv = document.getElementById('problem');
+            const answerInput = document.getElementById('answer-input');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            if (gameState.selectedDice.length === 2 && gameState.selectedOperation) {
+                const num1 = gameState.diceValues[gameState.selectedDice[0]];
+                const num2 = gameState.diceValues[gameState.selectedDice[1]];
+                const op = gameState.selectedOperation;
+                
+                let displayOp = op === '*' ? '×' : op === '/' ? '÷' : op;
+                
+                // For division, ensure we don't get decimals by making sure num1 is divisible by num2
+                if (op === '/' && num1 % num2 !== 0) {
+                    // Swap numbers or adjust to avoid decimals
+                    const adjustedNum1 = num2 * Math.floor(Math.random() * 6 + 1);
+                    gameState.currentProblem = {
+                        num1: adjustedNum1,
+                        num2: num2,
+                        operation: op,
+                        answer: adjustedNum1 / num2
+                    };
+                    problemDiv.textContent = `${adjustedNum1} ${displayOp} ${num2} = ?`;
+                } else {
+                    let answer;
+                    switch (op) {
+                        case '+': answer = num1 + num2; break;
+                        case '-': answer = num1 - num2; break;
+                        case '*': answer = num1 * num2; break;
+                        case '/': answer = num1 / num2; break;
+                    }
+                    
+                    gameState.currentProblem = {
+                        num1: num1,
+                        num2: num2,
+                        operation: op,
+                        answer: answer
+                    };
+                    problemDiv.textContent = `${num1} ${displayOp} ${num2} = ?`;
+                }
+                
+                answerInput.disabled = false;
+                submitBtn.disabled = false;
+                answerInput.focus();
+            } else {
+                problemDiv.textContent = 'Select two dice and an operation to create a math problem!';
+                answerInput.disabled = true;
+                submitBtn.disabled = true;
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseFloat(document.getElementById('answer-input').value);
+            const correctAnswer = gameState.currentProblem.answer;
+            const feedbackDiv = document.getElementById('feedback');
+            const rewardsDiv = document.getElementById('rewards');
+            
+            if (Math.abs(userAnswer - correctAnswer) < 0.01) { // Allow for small floating point errors
+                // Correct answer
+                feedbackDiv.textContent = '🎉 Correct! Great job!';
+                feedbackDiv.className = 'feedback correct';
+                
+                // Update game state
+                gameState.score += (10 * gameState.level);
+                gameState.streak += 1;
+                gameState.problemsSolved += 1;
+                
+                // Show rewards
+                const rewardEmoji = rewards[Math.floor(Math.random() * rewards.length)];
+                rewardsDiv.innerHTML = `<span class="reward">${rewardEmoji}</span>`;
+                
+                // Check for level up
+                if (gameState.problemsSolved % 5 === 0) {
+                    levelUp();
+                }
+                
+            } else {
+                // Incorrect answer
+                feedbackDiv.textContent = `❌ Not quite right. The answer was ${correctAnswer}. Try again!`;
+                feedbackDiv.className = 'feedback incorrect';
+                gameState.streak = 0;
+                rewardsDiv.innerHTML = '';
+            }
+            
+            updateDisplay();
+            resetForNextProblem();
+        }
+
+        function levelUp() {
+            gameState.level += 1;
+            if (gameState.diceCount < 6) { // Cap at 6 dice
+                gameState.diceCount += 1;
+            }
+            
+            const feedbackDiv = document.getElementById('feedback');
+            feedbackDiv.innerHTML = `<div class="level-up">🎊 LEVEL UP! 🎊<br>You're now level ${gameState.level} with ${gameState.diceCount} dice!</div>`;
+            
+            generateDiceValues(); // Generate new dice with increased count
+        }
+
+        function resetForNextProblem() {
+            setTimeout(() => {
+                document.getElementById('answer-input').value = '';
+                document.getElementById('answer-input').disabled = true;
+                document.getElementById('submit-btn').disabled = true;
+            }, 2000);
+        }
+
+        function resetSelection() {
+            gameState.selectedDice = [];
+            gameState.selectedOperation = null;
+            gameState.currentProblem = null;
+            
+            document.querySelectorAll('.dice').forEach(dice => dice.classList.remove('selected'));
+            document.querySelectorAll('.op-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('problem').textContent = 'Select two dice and an operation to create a math problem!';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('rewards').innerHTML = '';
+            document.getElementById('answer-input').value = '';
+            document.getElementById('answer-input').disabled = true;
+            document.getElementById('submit-btn').disabled = true;
+        }
+
+        function updateDisplay() {
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('score').textContent = gameState.score.toLocaleString();
+            document.getElementById('streak').textContent = gameState.streak;
+            document.getElementById('problems-solved').textContent = gameState.problemsSolved;
+        }
+
+        // Event listeners
+        document.querySelectorAll('.op-btn').forEach(btn => {
+            btn.onclick = () => selectOperation(btn.dataset.op);
+        });
+
+        document.getElementById('submit-btn').onclick = checkAnswer;
+
+        document.getElementById('answer-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !this.disabled) {
+                checkAnswer();
+            }
+        });
+
+        // Initialize game
+        initGame();
+    </script>
+</body>
+</html>

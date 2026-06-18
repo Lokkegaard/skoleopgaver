@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sammen i 4.C - om gruppedynamik og mobning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FFF7EC;
+    --ink:#2B2A4A;
+    --ink-soft:#5a587a;
+    --coral:#FF6B5E;
+    --sun:#FFC247;
+    --teal:#2FB6A3;
+    --sky:#5C9DED;
+    --berry:#B85C9E;
+    --card:#ffffff;
+    --shadow:0 18px 40px -18px rgba(43,42,74,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Nunito',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* decorative paper texture dots */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:radial-gradient(rgba(43,42,74,.04) 1.5px, transparent 1.5px);
+    background-size:26px 26px;
+  }
+
+  .stage{position:relative;width:100vw;height:100vh;z-index:1}
+
+  .slide{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:5.5vh 7vw 9vh;
+    opacity:0;visibility:hidden;
+    transform:translateY(14px);
+    transition:opacity .5s ease, transform .5s ease, visibility .5s;
+  }
+  .slide.active{opacity:1;visibility:visible;transform:none}
+
+  /* floating decorative blobs */
+  .blob{position:absolute;border-radius:50%;filter:blur(2px);opacity:.16;z-index:-1}
+
+  /* ---------- typography ---------- */
+  .eyebrow{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    letter-spacing:.18em;text-transform:uppercase;
+    font-size:clamp(.8rem,1.5vw,1.05rem);
+    color:var(--coral);margin-bottom:1.1rem;
+  }
+  h1{
+    font-family:'Fredoka',sans-serif;font-weight:700;
+    font-size:clamp(2.4rem,6.5vw,5.4rem);
+    line-height:1.02;letter-spacing:-.01em;
+  }
+  h2{
+    font-family:'Fredoka',sans-serif;font-weight:600;
+    font-size:clamp(1.9rem,4.6vw,3.4rem);
+    line-height:1.06;letter-spacing:-.01em;margin-bottom:1.4rem;
+  }
+  p.lead{
+    font-size:clamp(1.05rem,2.1vw,1.5rem);
+    line-height:1.55;max-width:34ch;color:var(--ink-soft);font-weight:600;
+  }
+  .wide p.lead{max-width:46ch}
+
+  /* ---------- two column layout ---------- */
+  .cols{display:grid;grid-template-columns:1.05fr .95fr;gap:5vw;align-items:center;width:100%}
+  .cols.flip{grid-template-columns:.95fr 1.05fr}
+  .cols.flip .art{order:-1}
+  .art{display:flex;align-items:center;justify-content:center}
+  .art svg{width:100%;height:auto;max-height:62vh;filter:drop-shadow(0 22px 30px rgba(43,42,74,.16))}
+
+  /* ---------- callout boxes ---------- */
+  .callout{
+    display:flex;gap:1rem;align-items:flex-start;
+    background:var(--card);border-radius:22px;padding:1.15rem 1.4rem;
+    box-shadow:var(--shadow);max-width:48ch;margin-top:1.6rem;
+  }
+  .callout .ic{flex:0 0 auto;width:46px;height:46px;border-radius:14px;display:grid;place-items:center}
+  .callout .ic svg{width:26px;height:26px}
+  .callout .tag{font-family:'Fredoka',sans-serif;font-weight:600;font-size:.95rem;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:.15rem}
+  .callout .txt{font-size:clamp(1rem,1.7vw,1.2rem);line-height:1.45;font-weight:600}
+  .callout.think .ic{background:rgba(92,157,237,.16)}
+  .callout.think .tag{color:var(--sky)}
+  .callout.do .ic{background:rgba(47,182,163,.16)}
+  .callout.do .tag{color:var(--teal)}
+
+  /* ---------- cards row (slide 7) ---------- */
+  .cardrow{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5vw;width:100%;margin-top:.5rem}
+  .ccard{background:var(--card);border-radius:24px;padding:1.6rem 1.5rem;box-shadow:var(--shadow);border-top:8px solid var(--c)}
+  .ccard .cic{width:62px;height:62px;margin-bottom:1rem}
+  .ccard h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(1.2rem,2.2vw,1.7rem);margin-bottom:.5rem;color:var(--c)}
+  .ccard p{font-size:clamp(.95rem,1.5vw,1.12rem);line-height:1.45;font-weight:600;color:var(--ink-soft)}
+
+  /* ---------- winner / loser (slide 6) ---------- */
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:1.6vw;width:100%;margin-top:.4rem}
+  .dcard{background:var(--card);border-radius:24px;padding:1.5rem 1.6rem;box-shadow:var(--shadow)}
+  .dcard h3{font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(1.3rem,2.3vw,1.9rem);display:flex;align-items:center;gap:.6rem;margin-bottom:.7rem}
+  .dcard ul{list-style:none;display:flex;flex-direction:column;gap:.55rem}
+  .dcard li{font-size:clamp(1rem,1.6vw,1.2rem);line-height:1.4;font-weight:600;color:var(--ink-soft);padding-left:1.7rem;position:relative}
+  .dcard li::before{content:"";position:absolute;left:0;top:.45em;width:11px;height:11px;border-radius:50%;background:var(--sun)}
+
+  /* agreements blanks (slide 10) */
+  .blanks{display:flex;flex-direction:column;gap:1.1rem;margin-top:1.6rem;max-width:42ch}
+  .blank{display:flex;align-items:center;gap:1rem;background:var(--card);border-radius:18px;padding:1rem 1.3rem;box-shadow:var(--shadow)}
+  .blank .num{font-family:'Fredoka',sans-serif;font-weight:700;color:#fff;background:var(--coral);width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto}
+  .blank .ln{flex:1;height:2px;background:repeating-linear-gradient(90deg,var(--ink-soft) 0 14px,transparent 14px 26px);opacity:.45}
+
+  /* title slide specials */
+  .title-slide{align-items:center;text-align:center}
+  .title-slide .cols{align-items:center}
+  .title-slide h1{font-size:clamp(2.8rem,8vw,6.4rem)}
+  .byline{margin-top:1.8rem;font-family:'Fredoka',sans-serif;font-weight:500;font-size:clamp(1rem,2vw,1.4rem);color:var(--ink-soft)}
+  .pill{display:inline-block;background:var(--ink);color:var(--paper);font-family:'Fredoka',sans-serif;font-weight:600;padding:.45rem 1.3rem;border-radius:999px;font-size:clamp(1rem,2vw,1.4rem);letter-spacing:.04em}
+
+  /* ---------- chrome: progress, nav, counter ---------- */
+  .progress{position:fixed;top:0;left:0;height:6px;background:var(--coral);width:0;z-index:50;transition:width .45s ease;border-radius:0 4px 4px 0}
+  .nav{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:18px;z-index:50}
+  .dots{display:flex;gap:9px}
+  .dot{width:10px;height:10px;border-radius:50%;background:rgba(43,42,74,.2);border:none;cursor:pointer;padding:0;transition:transform .2s,background .2s}
+  .dot.active{background:var(--coral);transform:scale(1.35)}
+  .arrow{width:46px;height:46px;border-radius:50%;border:none;background:var(--ink);color:var(--paper);cursor:pointer;font-size:1.3rem;display:grid;place-items:center;box-shadow:var(--shadow);transition:transform .15s,opacity .2s}
+  .arrow:hover{transform:translateY(-2px)}
+  .arrow:disabled{opacity:.28;cursor:default;transform:none}
+  .counter{position:fixed;top:18px;right:24px;z-index:50;font-family:'Fredoka',sans-serif;font-weight:600;color:var(--ink-soft);font-size:1rem}
+  .hint{position:fixed;bottom:24px;right:24px;z-index:50;font-size:.82rem;color:var(--ink-soft);font-weight:600;opacity:.7}
+  .hint b{font-family:'Fredoka',sans-serif}
+
+  /* teacher notes panel */
+  .notes{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--ink);color:#fff;
+    padding:1.1rem 1.6rem 1.2rem;transform:translateY(110%);transition:transform .35s ease;box-shadow:0 -10px 30px rgba(0,0,0,.25)}
+  body.show-notes .notes{transform:none}
+  .notes .nl{font-family:'Fredoka',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.12em;font-size:.78rem;color:var(--sun);margin-bottom:.35rem}
+  .notes p{font-size:clamp(.95rem,1.5vw,1.15rem);line-height:1.5;font-weight:600;max-width:90ch}
+
+  @media (max-width:820px){
+    .slide{padding:4.5vh 7vw 12vh}
+    .cols,.cols.flip{grid-template-columns:1fr;gap:2.2rem}
+    .cols.flip .art{order:0}
+    .art svg{max-height:34vh}
+    .cardrow{grid-template-columns:1fr;gap:.8rem}
+    .ccard{padding:1.1rem 1.2rem}
+    .ccard .cic{width:48px;height:48px;margin-bottom:.5rem}
+    .duo{grid-template-columns:1fr;gap:.9rem}
+    .hint{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="counter"><span id="cur">1</span> / <span id="total">11</span></div>
+
+<div class="stage" id="stage">
+
+  <!-- 1. FORSIDE -->
+  <section class="slide title-slide active">
+    <span class="blob" style="width:320px;height:320px;background:var(--sun);top:-60px;left:-40px"></span>
+    <span class="blob" style="width:260px;height:260px;background:var(--teal);bottom:-50px;right:-30px"></span>
+    <div class="cols">
+      <div>
+        <span class="eyebrow">Klassesamtale</span>
+        <h1>Sammen er<br>vi et hold</h1>
+        <p class="byline">En snak om gruppedynamik, ord og mobning</p>
+        <div style="margin-top:1.6rem"><span class="pill">4.C</span></div>
+      </div>
+      <div class="art">
+        <!-- group of kids -->
+        <svg viewBox="0 0 420 360" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="210" cy="320" rx="180" ry="26" fill="#2B2A4A" opacity=".08"/>
+          <!-- kid 1 -->
+          <g transform="translate(40,120)">
+            <rect x="6" y="78" width="78" height="120" rx="34" fill="#FF6B5E"/>
+            <circle cx="45" cy="50" r="40" fill="#FFD9B0"/>
+            <path d="M5 48a40 40 0 0180 0v-6a40 40 0 00-80 0z" fill="#6B4226"/>
+            <circle cx="32" cy="50" r="5" fill="#2B2A4A"/><circle cx="58" cy="50" r="5" fill="#2B2A4A"/>
+            <path d="M34 66q11 9 22 0" stroke="#2B2A4A" stroke-width="4" fill="none" stroke-linecap="round"/>
+          </g>
+          <!-- kid 2 (taller, middle) -->
+          <g transform="translate(150,80)">
+            <rect x="4" y="86" width="92" height="140" rx="40" fill="#2FB6A3"/>
+            <circle cx="50" cy="52" r="44" fill="#F2C29A"/>
+            <path d="M6 52a44 44 0 0188 0v-8a44 44 0 00-88 0z" fill="#2B2A4A"/>
+            <circle cx="36" cy="52" r="5.5" fill="#2B2A4A"/><circle cx="64" cy="52" r="5.5" fill="#2B2A4A"/>
+            <path d="M37 70q13 11 26 0" stroke="#2B2A4A" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+            <circle cx="24" cy="62" r="6" fill="#FF9AA0" opacity=".6"/><circle cx="76" cy="62" r="6" fill="#FF9AA0" opacity=".6"/>
+          </g>
+          <!-- kid 3 -->
+          <g transform="translate(280,120)">
+            <rect x="6" y="78" width="80" height="120" rx="34" fill="#5C9DED"/>
+            <circle cx="46" cy="50" r="40" fill="#E8B890"/>
+            <path d="M6 46a40 40 0 0180 4q-8-24-40-24t-40 20z" fill="#3A2418"/>
+            <circle cx="33" cy="50" r="5" fill="#2B2A4A"/><circle cx="59" cy="50" r="5" fill="#2B2A4A"/>
+            <path d="M35 66q11 9 22 0" stroke="#2B2A4A" stroke-width="4" fill="none" stroke-linecap="round"/>
+          </g>
+          <!-- little heart -->
+          <path d="M210 40c-10-16-34-6-34 12 0 14 22 26 34 34 12-8 34-20 34-34 0-18-24-28-34-12z" fill="#FFC247"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. HVORFOR -->
+  <section class="slide">
+    <span class="blob" style="width:300px;height:300px;background:var(--coral);top:-70px;right:6vw"></span>
+    <div class="cols flip wide">
+      <div>
+        <span class="eyebrow">Vores klasse</span>
+        <h2>Hvorfor taler vi om det i dag?</h2>
+        <p class="lead">I 4.C er vi gode til mange ting. Vi har det sjovt sammen, og vi hjælper hinanden. Nogle gange sker det, at ordene bliver hårde, især når vi konkurrerer og gerne vil vinde. I dag skal vi tale om, hvordan vi gerne vil være sammen, så alle har lyst til at være med.</p>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 400 360" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="200" cy="320" rx="160" ry="24" fill="#2B2A4A" opacity=".08"/>
+          <!-- classroom board -->
+          <rect x="60" y="40" width="280" height="150" rx="16" fill="#2FB6A3"/>
+          <rect x="60" y="40" width="280" height="150" rx="16" fill="none" stroke="#1f8174" stroke-width="6"/>
+          <path d="M95 90h120M95 120h180M95 150h90" stroke="#fff" stroke-width="7" stroke-linecap="round" opacity=".85"/>
+          <!-- two kids at desks -->
+          <g transform="translate(95,205)">
+            <circle cx="35" cy="20" r="26" fill="#FFD9B0"/>
+            <path d="M9 20a26 26 0 0152 0v-5a26 26 0 00-52 0z" fill="#C25A3A"/>
+            <circle cx="26" cy="22" r="3.5" fill="#2B2A4A"/><circle cx="44" cy="22" r="3.5" fill="#2B2A4A"/>
+            <path d="M27 33q8 6 16 0" stroke="#2B2A4A" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <rect x="0" y="50" width="70" height="40" rx="14" fill="#FF6B5E"/>
+            <rect x="-12" y="92" width="94" height="20" rx="8" fill="#8a6d4f"/>
+          </g>
+          <g transform="translate(215,205)">
+            <circle cx="35" cy="20" r="26" fill="#E8B890"/>
+            <path d="M9 18a26 26 0 0152 2q-5-16-26-16t-26 14z" fill="#3A2418"/>
+            <circle cx="26" cy="22" r="3.5" fill="#2B2A4A"/><circle cx="44" cy="22" r="3.5" fill="#2B2A4A"/>
+            <path d="M27 33q8 6 16 0" stroke="#2B2A4A" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <rect x="0" y="50" width="70" height="40" rx="14" fill="#5C9DED"/>
+            <rect x="-12" y="92" width="94" height="20" rx="8" fill="#8a6d4f"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. HVAD ER EN GRUPPE -->
+  <section class="slide">
+    <span class="blob" style="width:280px;height:280px;background:var(--sky);bottom:-60px;left:4vw"></span>
+    <div class="cols">
+      <div>
+        <span class="eyebrow">Gruppedynamik</span>
+        <h2>Hvad er en gruppe?</h2>
+        <p class="lead">En gruppe er mere end bare nogle personer, der er i det samme rum. I en gruppe påvirker vi hinanden hele tiden. Det kaldes gruppedynamik. Når én gør noget, smitter det af på de andre.</p>
+        <div class="callout think">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#5C9DED" stroke-width="2" stroke-linecap="round"><path d="M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/><path d="M9 21h6"/></svg></div>
+          <div><span class="tag">Tænk selv</span><span class="txt">Hvilke grupper er du en del af? Tænk på din klasse, dit hold, din familie og dine venner.</span></div>
+        </div>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 380 360" xmlns="http://www.w3.org/2000/svg">
+          <!-- connected circle of people -->
+          <circle cx="190" cy="180" r="120" fill="none" stroke="#FFC247" stroke-width="6" stroke-dasharray="2 18" stroke-linecap="round"/>
+          <g>
+            <circle cx="190" cy="60" r="34" fill="#FF6B5E"/><circle cx="178" cy="56" r="4" fill="#fff"/><circle cx="202" cy="56" r="4" fill="#fff"/><path d="M180 68q10 8 20 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <circle cx="294" cy="180" r="34" fill="#2FB6A3"/><circle cx="282" cy="176" r="4" fill="#fff"/><circle cx="306" cy="176" r="4" fill="#fff"/><path d="M284 188q10 8 20 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <circle cx="190" cy="300" r="34" fill="#5C9DED"/><circle cx="178" cy="296" r="4" fill="#fff"/><circle cx="202" cy="296" r="4" fill="#fff"/><path d="M180 308q10 8 20 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <circle cx="86" cy="180" r="34" fill="#B85C9E"/><circle cx="74" cy="176" r="4" fill="#fff"/><circle cx="98" cy="176" r="4" fill="#fff"/><path d="M76 188q10 8 20 0" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. STEMNINGEN SMITTER -->
+  <section class="slide">
+    <span class="blob" style="width:300px;height:300px;background:var(--sun);top:-70px;left:6vw"></span>
+    <div class="cols flip">
+      <div>
+        <span class="eyebrow">Følelser i klassen</span>
+        <h2>Stemningen smitter</h2>
+        <p class="lead">Når nogen er glade, bliver det rarere at være i klassen. Når nogen er sure eller siger noget grimt, kan hele stemningen ændre sig. Vi er sammen om at lave den gode stemning i 4.C.</p>
+        <div class="callout do">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2FB6A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></div>
+          <div><span class="tag">Øvelse</span><span class="txt">Smil-stafet. Vi sender et smil rundt i kredsen, en ad gangen. Læg mærke til, hvordan det føles, når smilet når hen til dig.</span></div>
+        </div>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+          <!-- spreading smiles, ripple -->
+          <circle cx="190" cy="160" r="150" fill="#2FB6A3" opacity=".08"/>
+          <circle cx="190" cy="160" r="105" fill="#2FB6A3" opacity=".1"/>
+          <circle cx="190" cy="160" r="62" fill="#FFC247"/>
+          <circle cx="172" cy="150" r="7" fill="#2B2A4A"/><circle cx="208" cy="150" r="7" fill="#2B2A4A"/>
+          <path d="M165 172q25 22 50 0" stroke="#2B2A4A" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <g fill="#FF6B5E">
+            <circle cx="60" cy="60" r="26"/><circle cx="320" cy="70" r="22"/><circle cx="70" cy="270" r="22"/><circle cx="315" cy="262" r="26"/>
+          </g>
+          <g stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round">
+            <path d="M50 62q10 9 20 0"/><path d="M311 72q9 8 18 0"/><path d="M61 272q9 8 18 0"/><path d="M305 264q10 9 20 0"/>
+          </g>
+          <g fill="#fff"><circle cx="53" cy="54" r="3.2"/><circle cx="67" cy="54" r="3.2"/><circle cx="313" cy="64" r="3"/><circle cx="327" cy="64" r="3"/><circle cx="63" cy="264" r="3"/><circle cx="77" cy="264" r="3"/><circle cx="307" cy="256" r="3.2"/><circle cx="323" cy="256" r="3.2"/></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. KONKURRENCEN -->
+  <section class="slide">
+    <span class="blob" style="width:300px;height:300px;background:var(--coral);bottom:-70px;right:6vw"></span>
+    <div class="cols">
+      <div>
+        <span class="eyebrow">Når vi konkurrerer</span>
+        <h2>Når konkurrencen<br>tager over</h2>
+        <p class="lead">Det er sjovt at konkurrere, og det er helt okay at have lyst til at vinde. Men når vi spiller, kan der nogle gange ryge hårde ord ud af munden på os. Måske bliver vi skuffede, eller også vil vi bare så gerne vinde.</p>
+        <div class="callout think">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#5C9DED" stroke-width="2" stroke-linecap="round"><path d="M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/><path d="M9 21h6"/></svg></div>
+          <div><span class="tag">Tænk selv</span><span class="txt">Hvordan har du det i kroppen, lige før du skal konkurrere? Og hvad plejer du at sige, hvis du taber?</span></div>
+        </div>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 380 360" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="190" cy="320" rx="150" ry="22" fill="#2B2A4A" opacity=".08"/>
+          <!-- two kids reaching for a ball / trophy -->
+          <g transform="translate(40,150)">
+            <rect x="0" y="60" width="74" height="120" rx="32" fill="#5C9DED"/>
+            <circle cx="40" cy="40" r="36" fill="#E8B890"/>
+            <path d="M4 40a36 36 0 0172 0v-6a36 36 0 00-72 0z" fill="#3A2418"/>
+            <circle cx="30" cy="42" r="4.5" fill="#2B2A4A"/><circle cx="50" cy="42" r="4.5" fill="#2B2A4A"/>
+            <path d="M30 56q5 4 10 1" stroke="#2B2A4A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <rect x="60" y="78" width="56" height="18" rx="9" fill="#5C9DED" transform="rotate(-22 60 78)"/>
+          </g>
+          <g transform="translate(266,150)">
+            <rect x="0" y="60" width="74" height="120" rx="32" fill="#FF6B5E"/>
+            <circle cx="34" cy="40" r="36" fill="#FFD9B0"/>
+            <path d="M-2 40a36 36 0 0172 0v-6a36 36 0 00-72 0z" fill="#C25A3A"/>
+            <circle cx="24" cy="42" r="4.5" fill="#2B2A4A"/><circle cx="44" cy="42" r="4.5" fill="#2B2A4A"/>
+            <path d="M24 56q5 4 10 1" stroke="#2B2A4A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <rect x="-42" y="78" width="56" height="18" rx="9" fill="#FF6B5E" transform="rotate(22 14 78)"/>
+          </g>
+          <!-- the ball -->
+          <circle cx="190" cy="150" r="34" fill="#FFC247" stroke="#2B2A4A" stroke-width="3"/>
+          <path d="M190 116v68M156 150h68" stroke="#2B2A4A" stroke-width="3"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. GOD VINDER, GOD TABER -->
+  <section class="slide wide">
+    <span class="blob" style="width:260px;height:260px;background:var(--teal);top:-50px;right:8vw"></span>
+    <span class="eyebrow">Sport og spil</span>
+    <h2>God vinder, god taber</h2>
+    <div class="duo">
+      <div class="dcard">
+        <h3>🏆 En god vinder</h3>
+        <ul>
+          <li>Glæder sig, men driller ikke de andre.</li>
+          <li>Siger godt spillet til alle, også til dem, der tabte.</li>
+          <li>Husker, at det kun er et spil.</li>
+        </ul>
+      </div>
+      <div class="dcard">
+        <h3>💪 En god taber</h3>
+        <ul>
+          <li>Må gerne være ærgerlig. Det er helt okay.</li>
+          <li>Tager ikke sin ærgrelse ud på de andre.</li>
+          <li>Siger tillykke og glæder sig til næste gang.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout do">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2FB6A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></div>
+      <div><span class="tag">Øvelse</span><span class="txt">Vi øver lige nu at sige godt spillet til hinanden, både når vi vinder, og når vi taber.</span></div>
+    </div>
+  </section>
+
+  <!-- 7. DRILLERI, KONFLIKT, MOBNING -->
+  <section class="slide wide">
+    <span class="eyebrow">Hvad er forskellen?</span>
+    <h2 style="margin-bottom:.8rem">Drilleri, konflikt eller mobning?</h2>
+    <div class="cardrow">
+      <div class="ccard" style="--c:#FFC247">
+        <svg class="cic" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" fill="#FFC247"/><circle cx="17" cy="22" r="3" fill="#2B2A4A"/><circle cx="31" cy="22" r="3" fill="#2B2A4A"/><path d="M16 30q8 7 16 0" stroke="#2B2A4A" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+        <h3>Drilleri</h3>
+        <p>Kan være sjovt for begge. Men hvis det kun er sjovt for den ene, gør det ondt og skal stoppe.</p>
+      </div>
+      <div class="ccard" style="--c:#5C9DED">
+        <svg class="cic" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" fill="#5C9DED"/><circle cx="17" cy="22" r="3" fill="#fff"/><circle cx="31" cy="22" r="3" fill="#fff"/><path d="M17 31h14" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+        <h3>Konflikt</h3>
+        <p>En uenighed, hvor man bliver uvenner for en tid. Det sker for alle, og man kan blive gode venner igen.</p>
+      </div>
+      <div class="ccard" style="--c:#FF6B5E">
+        <svg class="cic" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" fill="#FF6B5E"/><circle cx="17" cy="23" r="3" fill="#fff"/><circle cx="31" cy="23" r="3" fill="#fff"/><path d="M17 33q7-6 14 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+        <h3>Mobning</h3>
+        <p>Når det samme barn bliver holdt udenfor eller gjort ked af det igen og igen. Det skal altid stoppes.</p>
+      </div>
+    </div>
+    <div class="callout think">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#5C9DED" stroke-width="2" stroke-linecap="round"><path d="M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/><path d="M9 21h6"/></svg></div>
+      <div><span class="tag">Tænk selv</span><span class="txt">Kan du mærke forskel på drilleri, der er sjovt, og drilleri, der gør ondt?</span></div>
+    </div>
+  </section>
+
+  <!-- 8. ORD -->
+  <section class="slide">
+    <span class="blob" style="width:300px;height:300px;background:var(--berry);top:-60px;right:5vw"></span>
+    <div class="cols">
+      <div>
+        <span class="eyebrow">Ordenes magt</span>
+        <h2>Ord kan bygge op<br>eller rive ned</h2>
+        <p class="lead">Ord er stærke. Nogle ord får os til at vokse og få mod. Andre ord kan gøre os små og kede af det. Når et hårdt ord først er sagt, kan vi ikke tage det tilbage.</p>
+        <div class="callout do">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2FB6A3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg></div>
+          <div><span class="tag">Øvelse</span><span class="txt">Tandpasta-øvelsen. Vi presser lidt tandpasta ud af tuben. Prøv nu at presse den ind igen. Det kan man ikke, og sådan er det også med hårde ord.</span></div>
+        </div>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+          <!-- kind bubble -->
+          <g>
+            <path d="M40 60h150a26 26 0 0126 26v44a26 26 0 01-26 26H95l-30 26v-26H40a26 26 0 01-26-26V86a26 26 0 0126-26z" fill="#2FB6A3"/>
+            <path d="M60 100h110M60 122h78" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+          </g>
+          <!-- harsh bubble (spiky) -->
+          <g transform="translate(150,180)">
+            <path d="M30 0l14 14 18-6-4 18 18 8-16 12 8 18-19-3-7 18-12-16-18 7 3-19-18-9 17-11-9-18 19 4z" fill="#FF6B5E"/>
+            <path d="M22 26h44M30 40h30" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+          </g>
+          <path d="M250 70c-7-11-24-4-24 8 0 10 16 18 24 24 8-6 24-14 24-24 0-12-17-19-24-8z" fill="#FFC247"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. ALLE HAR EN ROLLE -->
+  <section class="slide">
+    <span class="blob" style="width:280px;height:280px;background:var(--sky);bottom:-60px;left:5vw"></span>
+    <div class="cols flip">
+      <div>
+        <span class="eyebrow">Tilskuerens magt</span>
+        <h2>Alle har en rolle</h2>
+        <p class="lead">Når nogen bliver drillet eller holdt udenfor, er der tit andre, der ser det. De kaldes tilskuere. Tilskuere har faktisk en stor magt, for de kan vælge at hjælpe. Du kan sige fra på en god måde, hente en voksen eller gå hen til den, der er ked af det, og være en god ven.</p>
+        <div class="callout think">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#5C9DED" stroke-width="2" stroke-linecap="round"><path d="M12 2a7 7 0 00-4 12.7V17h8v-2.3A7 7 0 0012 2z"/><path d="M9 21h6"/></svg></div>
+          <div><span class="tag">Tænk selv</span><span class="txt">Hvad ville du ønske, at de andre gjorde, hvis det var dig, der stod udenfor?</span></div>
+        </div>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 380 340" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="190" cy="300" rx="150" ry="22" fill="#2B2A4A" opacity=".08"/>
+          <!-- lonely kid -->
+          <g transform="translate(150,150)">
+            <rect x="6" y="60" width="68" height="110" rx="30" fill="#9aa0b5"/>
+            <circle cx="40" cy="38" r="34" fill="#E8B890"/>
+            <circle cx="30" cy="40" r="4.5" fill="#2B2A4A"/><circle cx="50" cy="40" r="4.5" fill="#2B2A4A"/>
+            <path d="M30 56q10-6 20 0" stroke="#2B2A4A" stroke-width="4" fill="none" stroke-linecap="round"/>
+          </g>
+          <!-- helper reaching out -->
+          <g transform="translate(40,150)">
+            <rect x="6" y="60" width="68" height="110" rx="30" fill="#2FB6A3"/>
+            <circle cx="40" cy="38" r="34" fill="#FFD9B0"/>
+            <circle cx="30" cy="40" r="4.5" fill="#2B2A4A"/><circle cx="50" cy="40" r="4.5" fill="#2B2A4A"/>
+            <path d="M30 54q10 7 20 0" stroke="#2B2A4A" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <rect x="68" y="86" width="64" height="18" rx="9" fill="#2FB6A3"/>
+          </g>
+          <!-- heart between -->
+          <path d="M150 110c-7-11-24-4-24 8 0 10 16 18 24 24 8-6 24-14 24-24 0-12-17-19-24-8z" fill="#FF6B5E"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. VORES AFTALER -->
+  <section class="slide">
+    <span class="blob" style="width:300px;height:300px;background:var(--sun);top:-70px;right:6vw"></span>
+    <div class="cols">
+      <div>
+        <span class="eyebrow">Vores klasse, vores regler</span>
+        <h2>Hvad gør vi i 4.C?</h2>
+        <p class="lead">Nu laver vi nogle aftaler sammen. Aftaler, vi selv er med til at bestemme, er nemmere at holde. Vi finder sammen på tre aftaler for, hvordan vi taler til hinanden, også når vi konkurrerer.</p>
+        <div class="blanks">
+          <div class="blank"><span class="num">1</span><span class="ln"></span></div>
+          <div class="blank"><span class="num">2</span><span class="ln"></span></div>
+          <div class="blank"><span class="num">3</span><span class="ln"></span></div>
+        </div>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+          <rect x="70" y="40" width="220" height="280" rx="22" fill="#fff" stroke="#FFC247" stroke-width="8"/>
+          <rect x="150" y="24" width="60" height="34" rx="10" fill="#FF6B5E"/>
+          <g stroke="#2FB6A3" stroke-width="10" stroke-linecap="round" fill="none">
+            <path d="M104 110l16 16 26-30"/><path d="M104 180l16 16 26-30"/><path d="M104 250l16 16 26-30"/>
+          </g>
+          <g stroke="#9aa0b5" stroke-width="9" stroke-linecap="round">
+            <path d="M170 116h84"/><path d="M170 186h84"/><path d="M170 256h84"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. AFSLUTNING -->
+  <section class="slide title-slide">
+    <span class="blob" style="width:320px;height:320px;background:var(--teal);top:-70px;right:-40px"></span>
+    <span class="blob" style="width:260px;height:260px;background:var(--coral);bottom:-60px;left:-30px"></span>
+    <div class="cols">
+      <div>
+        <span class="eyebrow">Til sidst</span>
+        <h1>Vi er holdet 4.C</h1>
+        <p class="byline" style="max-width:30ch;margin-left:auto;margin-right:auto">Vi vinder og taber sammen. Vi passer på hinanden, og vi taler pænt, også når det er svært. Sammen er vi et stærkt hold.</p>
+      </div>
+      <div class="art">
+        <svg viewBox="0 0 360 340" xmlns="http://www.w3.org/2000/svg">
+          <!-- stacked hands / unity -->
+          <circle cx="180" cy="160" r="120" fill="#FFC247" opacity=".18"/>
+          <g>
+            <rect x="70" y="150" width="90" height="40" rx="20" fill="#FF6B5E" transform="rotate(-18 115 170)"/>
+            <rect x="200" y="150" width="90" height="40" rx="20" fill="#2FB6A3" transform="rotate(18 245 170)"/>
+            <rect x="80" y="200" width="90" height="40" rx="20" fill="#5C9DED" transform="rotate(14 125 220)"/>
+            <rect x="190" y="200" width="90" height="40" rx="20" fill="#B85C9E" transform="rotate(-14 235 220)"/>
+          </g>
+          <path d="M180 70c-12-19-40-7-40 14 0 17 26 31 40 40 14-9 40-23 40-40 0-21-28-33-40-14z" fill="#FF6B5E"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- chrome -->
+<div class="nav">
+  <button class="arrow" id="prev" aria-label="Forrige">&#8592;</button>
+  <div class="dots" id="dots"></div>
+  <button class="arrow" id="next" aria-label="Næste">&#8594;</button>
+</div>
+<div class="hint">Brug <b>← →</b> til at skifte slide &middot; <b>N</b> for lærernoter</div>
+
+<div class="notes" id="notes">
+  <div class="nl">Lærernote</div>
+  <p id="noteText"></p>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dotsWrap = document.getElementById('dots');
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const progress = document.getElementById('progress');
+  const curEl = document.getElementById('cur');
+  const noteText = document.getElementById('noteText');
+  let i = 0;
+
+  const notes = [
+    "Velkommen. Sæt en rolig, positiv tone. Fortæl at I i dag skal tale sammen, ikke at nogen skal hænges ud. Saml gerne klassen i en rundkreds.",
+    "Vær konkret men anerkendende. Nævn at I er en god klasse, og at det her handler om at blive endnu bedre til at være sammen, særligt i konkurrencer.",
+    "Lad eleverne nævne grupper, de er en del af. Skriv et par op på tavlen. Pointen er, at vi alle påvirker stemningen i de grupper, vi er i.",
+    "Smil-stafetten tager kun et par minutter og åbner samtalen fint. Tal bagefter om, hvordan glæde og dårligt humør begge smitter.",
+    "Det vigtige er at normalisere lysten til at vinde, men adskille følelsen fra de hårde ord. Lad eleverne sætte ord på, hvad der sker i kroppen.",
+    "Lav gerne en kort rollespilsøvelse: to elever spiller et hurtigt spil, og resten øver at sige godt spillet bagefter.",
+    "Brug god tid her. Lad eleverne give egne eksempler på de tre ting. Understreg, at gentagelsen og magtubalancen er det, der gør noget til mobning.",
+    "Tandpasta-øvelsen virker stærkt visuelt. Hav en billig tube klar. Spørg bagefter, hvad man så kan gøre, når man kommer til at sige noget hårdt (sige undskyld).",
+    "Tal om tilskuerens magt uden at lægge skyld. Spørg ind til, hvad der er en god måde at sige fra på, og hvornår man henter en voksen.",
+    "Lad klassen formulere aftalerne selv, så de føler ejerskab. Skriv dem op, hæng dem op bagefter, og henvis til dem i konkurrencesituationer.",
+    "Saml trådene kort og positivt. Slut af med en fælles handling, fx alle siger en ting, de vil gøre for at passe på klassen."
+  ];
+
+  function build(){
+    slides.forEach((_,n)=>{
+      const b=document.createElement('button');
+      b.className='dot'+(n===0?' active':'');
+      b.setAttribute('aria-label','Slide '+(n+1));
+      b.addEventListener('click',()=>go(n));
+      dotsWrap.appendChild(b);
+    });
+    document.getElementById('total').textContent=slides.length;
+  }
+  function go(n){
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,k)=>s.classList.toggle('active',k===i));
+    document.querySelectorAll('.dot').forEach((d,k)=>d.classList.toggle('active',k===i));
+    progress.style.width=((i+1)/slides.length*100)+'%';
+    curEl.textContent=i+1;
+    noteText.textContent=notes[i]||'';
+    prev.disabled=i===0;
+    next.disabled=i===slides.length-1;
+  }
+  prev.addEventListener('click',()=>go(i-1));
+  next.addEventListener('click',()=>go(i+1));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(i+1);}
+    else if(e.key==='ArrowLeft'){go(i-1);}
+    else if(e.key.toLowerCase()==='n'){document.body.classList.toggle('show-notes');}
+  });
+  // swipe for iPad / touch
+  let x0=null;
+  document.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+  document.addEventListener('touchend',e=>{
+    if(x0===null)return;
+    const dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>55){ dx<0?go(i+1):go(i-1); }
+    x0=null;
+  },{passive:true});
+
+  build();go(0);
+</script>
+</body>
+</html>

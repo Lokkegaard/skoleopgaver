@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parkour-video · Idræt</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;600;700;900&display=swap');
+
+:root{
+  --ink:#0d0d0f;
+  --paper:#f4f1e8;
+  --volt:#d6ff3f;
+  --orange:#ff5722;
+  --cobalt:#2962ff;
+  --grain:rgba(0,0,0,.04);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html{scroll-behavior:smooth;}
+
+body{
+  font-family:'Archivo',sans-serif;
+  background:var(--ink);
+  color:var(--paper);
+  overflow-x:hidden;
+}
+
+/* ===== Sektioner ===== */
+.slide{
+  min-height:100vh;
+  padding:6vh 7vw;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  border-bottom:6px solid var(--volt);
+}
+
+/* ===== HERO ===== */
+.hero{
+  background:
+    radial-gradient(circle at 80% 20%, rgba(214,255,63,.18), transparent 45%),
+    radial-gradient(circle at 10% 90%, rgba(255,87,34,.22), transparent 50%),
+    var(--ink);
+  overflow:hidden;
+}
+.hero .kicker{
+  font-weight:700;
+  letter-spacing:.5em;
+  text-transform:uppercase;
+  font-size:clamp(.7rem,1.4vw,1rem);
+  color:var(--volt);
+  margin-bottom:1.2rem;
+}
+.hero h1{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(3.5rem,16vw,13rem);
+  line-height:.82;
+  text-transform:uppercase;
+  letter-spacing:-.02em;
+}
+.hero h1 .out{
+  -webkit-text-stroke:2px var(--paper);
+  color:transparent;
+}
+.hero h1 .fill{color:var(--volt);}
+.hero .meta{
+  margin-top:2.5rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:1rem 2.5rem;
+  font-weight:600;
+  font-size:clamp(.85rem,1.6vw,1.15rem);
+}
+.hero .meta span{
+  border:1.5px solid rgba(244,241,232,.4);
+  padding:.5rem 1.1rem;
+  border-radius:40px;
+}
+.scroll-hint{
+  position:absolute;
+  bottom:3vh;left:7vw;
+  font-weight:700;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  font-size:.75rem;
+  color:var(--paper);
+  opacity:.7;
+  animation:bob 1.6s ease-in-out infinite;
+}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+
+/* ===== INTRO ===== */
+.intro{background:var(--paper);color:var(--ink);}
+.section-tag{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(1rem,2.2vw,1.4rem);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--orange);
+  margin-bottom:1rem;
+}
+.intro h2{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(2.4rem,7vw,5.5rem);
+  line-height:.95;
+  text-transform:uppercase;
+  margin-bottom:1.6rem;
+}
+.intro .lead{
+  font-size:clamp(1.05rem,2.2vw,1.5rem);
+  max-width:60ch;
+  line-height:1.55;
+  font-weight:400;
+}
+.intro .lead b{font-weight:700;}
+.intro-grid{
+  margin-top:2.4rem;
+  display:flex;
+  flex-wrap:wrap;
+  gap:1rem;
+}
+.chip{
+  background:var(--ink);
+  color:var(--paper);
+  padding:.7rem 1.3rem;
+  border-radius:6px;
+  font-weight:700;
+  font-size:clamp(.85rem,1.6vw,1.05rem);
+}
+.video-box{
+  margin-top:2.6rem;
+  background:var(--ink);
+  color:var(--paper);
+  border:4px solid var(--ink);
+  border-radius:14px;
+  padding:2rem;
+  max-width:680px;
+  position:relative;
+  box-shadow:14px 14px 0 var(--orange);
+}
+.video-box .play{
+  display:inline-flex;
+  align-items:center;
+  gap:.7rem;
+  font-family:'Anton',sans-serif;
+  font-size:clamp(1.2rem,3vw,2rem);
+  text-transform:uppercase;
+  color:var(--volt);
+  text-decoration:none;
+  letter-spacing:.02em;
+}
+.video-box .play .tri{
+  width:0;height:0;
+  border-left:26px solid var(--volt);
+  border-top:16px solid transparent;
+  border-bottom:16px solid transparent;
+  transition:transform .25s ease;
+}
+.video-box .play:hover .tri{transform:scale(1.25);}
+.video-box p{margin-top:.9rem;font-size:.95rem;opacity:.85;line-height:1.5;}
+.video-box .url{
+  margin-top:.6rem;
+  display:inline-block;
+  font-size:.8rem;
+  color:var(--volt);
+  word-break:break-all;
+}
+.inspo{
+  margin-top:2rem;
+  font-size:clamp(1rem,2vw,1.3rem);
+  font-weight:700;
+  max-width:55ch;
+  line-height:1.45;
+  border-left:6px solid var(--orange);
+  padding-left:1.2rem;
+}
+
+/* ===== UDFORDRINGER ===== */
+.tasks{background:var(--ink);}
+.tasks > .head{margin-bottom:3rem;}
+.tasks .section-tag{color:var(--volt);}
+.tasks h2{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(2.4rem,8vw,6rem);
+  line-height:.9;
+  text-transform:uppercase;
+}
+.tasks .sub{margin-top:.8rem;font-weight:600;opacity:.8;font-size:clamp(.95rem,1.8vw,1.2rem);}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1.4rem;
+}
+.card{
+  background:var(--paper);
+  color:var(--ink);
+  border-radius:12px;
+  padding:1.8rem 1.6rem 2rem;
+  position:relative;
+  overflow:hidden;
+  transition:transform .25s ease, box-shadow .25s ease;
+  min-height:200px;
+}
+.card:hover{transform:translateY(-8px);box-shadow:0 18px 0 -4px var(--volt);}
+.card .num{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(3.5rem,7vw,5rem);
+  line-height:.8;
+  color:transparent;
+  -webkit-text-stroke:2px var(--orange);
+  position:absolute;
+  top:.6rem;right:1rem;
+  opacity:.85;
+}
+.card .ico{font-size:2.2rem;display:block;margin-bottom:.8rem;}
+.card h3{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(1.3rem,2.5vw,1.7rem);
+  text-transform:uppercase;
+  line-height:1;
+  margin-bottom:.7rem;
+  max-width:14ch;
+}
+.card p{font-size:.95rem;line-height:1.5;font-weight:400;}
+.card:nth-child(2n) .num{-webkit-text-stroke-color:var(--cobalt);}
+.card:nth-child(3n) .num{-webkit-text-stroke-color:var(--ink);}
+
+/* ===== EDIT / WEVIDEO ===== */
+.edit{background:var(--cobalt);color:var(--paper);}
+.edit .section-tag{color:var(--volt);}
+.edit h2{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(2.4rem,7.5vw,5.5rem);
+  line-height:.92;
+  text-transform:uppercase;
+  margin-bottom:1.5rem;
+}
+.edit .lead{
+  font-size:clamp(1.05rem,2.2vw,1.5rem);
+  max-width:60ch;
+  line-height:1.55;
+  font-weight:400;
+}
+.edit .lead b{font-weight:700;color:var(--volt);}
+.steps{
+  margin-top:2.4rem;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1.2rem;
+  max-width:1000px;
+}
+.step{
+  background:rgba(255,255,255,.08);
+  border:1.5px solid rgba(244,241,232,.3);
+  border-radius:10px;
+  padding:1.4rem 1.4rem 1.6rem;
+}
+.step b{
+  font-family:'Anton',sans-serif;
+  font-size:1.3rem;
+  display:flex;align-items:center;gap:.6rem;
+  margin-bottom:.5rem;
+  text-transform:uppercase;
+}
+.step b .n{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:2rem;height:2rem;border-radius:50%;
+  background:var(--volt);color:var(--ink);
+  font-size:1rem;flex:none;
+}
+.step span{font-size:.95rem;line-height:1.5;}
+.edit .video-box{box-shadow:14px 14px 0 var(--volt);}
+.edit .video-box .play{color:var(--volt);}
+.edit .video-box .play .tri{border-left-color:var(--volt);}
+
+/* ===== TIPS / FOOTER ===== */
+.outro{
+  background:var(--volt);
+  color:var(--ink);
+  border-bottom:none;
+}
+.outro h2{
+  font-family:'Anton',sans-serif;
+  font-size:clamp(2.2rem,8vw,6rem);
+  line-height:.9;
+  text-transform:uppercase;
+  margin-bottom:1.6rem;
+}
+.rules{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1.2rem;
+  max-width:900px;
+}
+.rule{
+  background:var(--ink);
+  color:var(--paper);
+  padding:1.4rem 1.5rem;
+  border-radius:10px;
+}
+.rule b{font-family:'Anton',sans-serif;font-size:1.4rem;display:block;margin-bottom:.4rem;color:var(--volt);}
+.rule span{font-size:.95rem;line-height:1.5;}
+.signoff{
+  margin-top:3rem;
+  font-family:'Anton',sans-serif;
+  font-size:clamp(1.4rem,4vw,2.6rem);
+  text-transform:uppercase;
+}
+
+@media(max-width:600px){
+  .slide{padding:8vh 6vw;}
+  .video-box{box-shadow:8px 8px 0 var(--orange);}
+  .edit .video-box{box-shadow:8px 8px 0 var(--volt);}
+}
+
+/* ===== SIDEBEMÆRKNINGER ===== */
+.aside{
+  margin-top:2rem;
+  display:inline-block;
+  position:relative;
+  background:var(--orange);
+  color:var(--paper);
+  font-weight:700;
+  font-size:clamp(.9rem,1.7vw,1.1rem);
+  line-height:1.4;
+  padding:1rem 1.3rem;
+  border-radius:4px 14px 14px 14px;
+  max-width:46ch;
+  transform:rotate(-1.2deg);
+  box-shadow:5px 5px 0 rgba(0,0,0,.25);
+}
+.aside::before{
+  content:"💬";
+  margin-right:.4rem;
+}
+.aside b{color:var(--volt);}
+.aside.cobalt{background:var(--cobalt);transform:rotate(1deg);}
+.aside.cobalt b{color:var(--volt);}
+.aside.dark{background:var(--ink);transform:rotate(-.6deg);}
+.aside.dark b{color:var(--orange);}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="slide hero">
+  <p class="kicker">Idræt</p>
+  <h1><span class="fill">Parkour</span><br><span class="out">video</span></h1>
+  <div class="meta">
+    <span>🎬 Film jeres egen video</span>
+    <span>🏃 7 udfordringer</span>
+    <span>⚡ Vis jeres bedste moves</span>
+  </div>
+  <div class="scroll-hint">↓ scroll ned</div>
+</section>
+
+<!-- INTRO -->
+<section class="slide intro">
+  <p class="section-tag">Hvad skal vi lave?</p>
+  <h2>Hvad er en<br>parkourvideo?</h2>
+  <p class="lead">
+    Parkour handler om at bevæge sig hurtigt og smidigt gennem omgivelserne, hvor man <b>springer, klatrer, balancerer og ruller</b> over forhindringer på den mest flydende måde. En <b>parkourvideo</b> er en film, hvor I filmer jer selv lave moves rundt i et område og klipper det sammen til én sej video med fart, musik og flow.
+  </p>
+  <div class="intro-grid">
+    <span class="chip">🤸 Spring</span>
+    <span class="chip">🧗 Klatring</span>
+    <span class="chip">⚖️ Balance</span>
+    <span class="chip">🌀 Ruller</span>
+    <span class="chip">🎥 Klip & flow</span>
+  </div>
+
+  <div class="video-box">
+    <a class="play" href="https://www.youtube.com/watch?v=j8CsMZv36dE" target="_blank" rel="noopener">
+      <span class="tri"></span> Se inspirationsvideoen
+    </a>
+    <p>Klik for at se en parkourvideo på YouTube. Læg mærke til hvordan de filmer, klipper og bruger omgivelserne.</p>
+    <a class="url" href="https://www.youtube.com/watch?v=j8CsMZv36dE" target="_blank" rel="noopener">youtube.com/watch?v=j8CsMZv36dE</a>
+  </div>
+
+  <p class="inspo">
+    👀 Søg selv efter mere inspiration! Prøv at google eller søge på YouTube efter fx <b>“parkour for beginners”</b>, <b>“parkour moves”</b> eller <b>“freerunning”</b>, og find moves I selv har lyst til at prøve.
+  </p>
+
+  <div class="aside cobalt">PS: Idéen til hele dette projekt er selvfølgelig udtænkt af den supersej idrætslærer <b>Siff</b>, som altid finder på de klogeste opgaver.</div>
+</section>
+
+<!-- UDFORDRINGER -->
+<section class="slide tasks">
+  <div class="head">
+    <p class="section-tag">Opgaven</p>
+    <h2>De 7 udfordringer</h2>
+    <p class="sub">Alle 7 udfordringer skal indgå i jeres video. Vær kreative, og husk sikkerheden!</p>
+    <div class="aside">Fun fact: Det kræver vild dygtighed at sammensætte så fede udfordringer, og det er præcis hvad <b>Jacob</b> er kendt for. Spørg ham endelig om hjælp, han er nemlig lige så klog som han er sej.</div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <span class="num">1</span>
+      <span class="ico">🏀</span>
+      <h3>Trickshot med bold</h3>
+      <p>Lav et sejt trickshot, hvor I rammer et mål, en spand eller en kurv på en overraskende måde. Gerne kombineret med et hop eller en drejning.</p>
+    </div>
+    <div class="card">
+      <span class="num">2</span>
+      <span class="ico">⚖️</span>
+      <h3>Balancegang</h3>
+      <p>Find en bænk, kantsten eller bom og balancér henover den uden at falde ned. Bonus hvis I gør det med stil.</p>
+    </div>
+    <div class="card">
+      <span class="num">3</span>
+      <span class="ico">🤸</span>
+      <h3>Et spring over en forhindring</h3>
+      <p>Spring, hop eller vault over en forhindring, fx en bænk, et rækværk eller en kasse. Vis luft under fødderne!</p>
+    </div>
+    <div class="card">
+      <span class="num">4</span>
+      <span class="ico">🌀</span>
+      <h3>En rulle (roll)</h3>
+      <p>Lav en kontrolleret forlæns rulle på en blød overflade. Det er sådan parkour-udøvere lander blødt.</p>
+    </div>
+    <div class="card">
+      <span class="num">5</span>
+      <span class="ico">🤝</span>
+      <h3>Et samarbejds-move</h3>
+      <p>Lav et move hvor mindst 2 personer hjælper hinanden, fx et synkront hop eller en der hjælper en anden op.</p>
+    </div>
+    <div class="card">
+      <span class="num">6</span>
+      <span class="ico">🎥</span>
+      <h3>Et kreativt kamera-trick</h3>
+      <p>Brug kameraet smart: en der “teleporterer”, et move set fra to vinkler, eller et klip hvor I springer ud af billedet og ind i det næste.</p>
+    </div>
+    <div class="card">
+      <span class="num">7</span>
+      <span class="ico">⚡</span>
+      <h3>Et frit move efter eget valg</h3>
+      <p>Find ét move I selv har øvet jer på fra en video, I har set. Vis jeres bedste personlige trick!</p>
+    </div>
+  </div>
+</section>
+
+<!-- OPTAGELSE & REDIGERING -->
+<section class="slide edit">
+  <p class="section-tag">Sådan laver I filmen</p>
+  <h2>Optag &<br>redigér i WeVideo</h2>
+  <p class="lead">
+    Optag jeres klip med en tablet eller telefon, og saml det hele i <b>WeVideo på Skoletube</b>. Her kan I klippe klippene sammen, tilføje <b>musik, slowmotion, overgange og effekter</b>, og gøre videoen til ét sejt, flydende flow.
+  </p>
+
+  <div class="steps">
+    <div class="step"><b><span class="n">1</span>Optag</b><span>Film alle 7 udfordringer. Tag gerne flere optagelser af hvert move, så I kan vælge det bedste.</span></div>
+    <div class="step"><b><span class="n">2</span>Importér</b><span>Log ind på Skoletube og åbn WeVideo. Læg jeres klip ind på tidslinjen.</span></div>
+    <div class="step"><b><span class="n">3</span>Klip</b><span>Klip det kedelige væk, så kun de bedste sekunder er med. Hold tempoet højt.</span></div>
+    <div class="step"><b><span class="n">4</span>Effekter</b><span>Tilføj musik, slowmotion, overgange og tekst. Brug effekter til at fremhæve jeres bedste moves.</span></div>
+    <div class="step"><b><span class="n">5</span>Eksportér</b><span>Gem og eksportér den færdige video, klar til at vise!</span></div>
+  </div>
+
+  <div class="video-box">
+    <a class="play" href="https://www.youtube.com/watch?v=r5KlH9DIt5s" target="_blank" rel="noopener">
+      <span class="tri"></span> Inspiration til klipning
+    </a>
+    <p>Se hvordan en parkourvideo klippes og redigeres. Læg mærke til tempo, overgange og brug af musik.</p>
+    <a class="url" href="https://www.youtube.com/watch?v=r5KlH9DIt5s" target="_blank" rel="noopener">youtube.com/watch?v=r5KlH9DIt5s</a>
+  </div>
+
+  <div class="aside dark">Tip: Hvis I går i stå i WeVideo, så fang <b>Henrik</b>. Han er ikke bare dygtig til idræt, han er også overraskende skarp til redigering.</div>
+</section>
+
+<!-- OUTRO / SPILLEREGLER -->
+<section class="slide outro">
+  <p class="section-tag" style="color:var(--ink)">Inden I går i gang</p>
+  <h2>Husk spillereglerne</h2>
+  <div class="rules">
+    <div class="rule"><b>Sikkerhed</b><span>Test forhindringen er stabil, lav kun moves I tør, og land blødt. Aldrig på vådt eller glat underlag.</span></div>
+    <div class="rule"><b>Alle med</b><span>Alle i gruppen skal være med i mindst ét move foran kameraet.</span></div>
+    <div class="rule"><b>Klip det sammen</b><span>Film klippene og sæt dem sammen til én flydende video med musik.</span></div>
+    <div class="rule"><b>Vær kreative</b><span>Vinkler, slowmotion og sjove overgange gør videoen meget sejere.</span></div>
+  </div>
+  <p class="signoff">Klar? Sæt i gang, og film løs! 🎬</p>
+  <div class="aside cobalt">Og husk: Uanset hvor sej jeres video bliver, bliver den aldrig helt så sej, klog og dygtig som <b>Siff, Jacob og Henrik</b>. Men I må gerne prøve! 😎</div>
+</section>
+
+</body>
+</html>

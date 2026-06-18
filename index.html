@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skoleopgaver</title>
+<style>
+  :root{
+    --bg:#f3f6ff;
+    --ink:#1f2a44;
+    --muted:#5b678a;
+    --card:#ffffff;
+    --mat:#ff6b35;
+    --mat2:#ffd23f;
+    --triv:#2ec4b6;
+    --idr:#3a86ff;
+    --nat:#52b788;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  header{
+    background:linear-gradient(135deg,#3a86ff,#8338ec);
+    color:#fff;
+    padding:48px 20px 56px;
+    text-align:center;
+    border-radius:0 0 32px 32px;
+    box-shadow:0 8px 24px rgba(131,56,236,.25);
+  }
+  header h1{font-size:2.6rem;margin-bottom:8px}
+  header p{font-size:1.15rem;opacity:.95}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+  .section{margin-top:40px}
+  .section-title{
+    display:flex;align-items:center;gap:12px;
+    font-size:1.6rem;margin-bottom:18px;
+  }
+  .pill{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:46px;height:46px;border-radius:14px;font-size:1.5rem;
+    box-shadow:0 4px 10px rgba(0,0,0,.12);
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:18px;
+  }
+  .card{
+    display:flex;flex-direction:column;
+    background:var(--card);
+    border-radius:20px;
+    padding:22px;
+    text-decoration:none;
+    color:inherit;
+    box-shadow:0 4px 14px rgba(31,42,68,.08);
+    border:2px solid transparent;
+    transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;
+    position:relative;
+    overflow:hidden;
+  }
+  .card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 14px 28px rgba(31,42,68,.16);
+  }
+  .card .emoji{font-size:2.6rem;margin-bottom:12px}
+  .card h3{font-size:1.2rem;margin-bottom:6px}
+  .card p{color:var(--muted);font-size:.95rem;flex-grow:1}
+  .card .go{
+    margin-top:16px;font-weight:700;font-size:.95rem;
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .card .bar{position:absolute;top:0;left:0;width:100%;height:6px}
+  .mat .pill{background:var(--mat2)} .mat .bar{background:var(--mat)} .mat:hover{border-color:var(--mat)} .mat .go{color:var(--mat)}
+  .triv .pill{background:#aef3ec} .triv .bar{background:var(--triv)} .triv:hover{border-color:var(--triv)} .triv .go{color:var(--triv)}
+  .idr .pill{background:#cfe0ff} .idr .bar{background:var(--idr)} .idr:hover{border-color:var(--idr)} .idr .go{color:var(--idr)}
+  .nat .pill{background:#c9efd8} .nat .bar{background:var(--nat)} .nat:hover{border-color:var(--nat)} .nat .go{color:var(--nat)}
+  footer{text-align:center;color:var(--muted);font-size:.9rem;padding:30px 20px 50px}
+  @media(max-width:520px){header h1{font-size:2rem}}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎒 Skoleopgaver</h1>
+  <p>Vælg en opgave herunder og gå i gang!</p>
+</header>
+
+<div class="wrap">
+
+  <section class="section">
+    <div class="section-title"><span class="pill">🔢</span> Matematik</div>
+    <div class="grid">
+      <a class="card mat" href="escape-room.html"><span class="bar"></span>
+        <div class="emoji">🔐</div><h3>Regne-Escape Room</h3>
+        <p>Løs regnehistorier og find vej ud, rum for rum.</p>
+        <span class="go">Spil →</span></a>
+      <a class="card mat" href="mysteriet-om-4c.html"><span class="bar"></span>
+        <div class="emoji">🕵️</div><h3>Mysteriet om 4.C</h3>
+        <p>Detektivspil: find de rigtige spor og løs regnestykkerne.</p>
+        <span class="go">Spil →</span></a>
+      <a class="card mat" href="mysteriet-i-matematikhuset.html"><span class="bar"></span>
+        <div class="emoji">🏚️</div><h3>Mysteriet i Matematikhuset</h3>
+        <p>Kom igennem husets rum ved at svare rigtigt.</p>
+        <span class="go">Spil →</span></a>
+      <a class="card mat" href="matematikspil.html"><span class="bar"></span>
+        <div class="emoji">🎮</div><h3>Matematikspil</h3>
+        <p>Digitalt matematikspil til at træne regning.</p>
+        <span class="go">Spil →</span></a>
+      <a class="card mat" href="math-dice-adventure.html"><span class="bar"></span>
+        <div class="emoji">🎲</div><h3>Math Dice Adventure</h3>
+        <p>Terningespil hvor du regner dig videre.</p>
+        <span class="go">Spil →</span></a>
+      <a class="card mat" href="lokes-gaader-udregninger.html"><span class="bar"></span>
+        <div class="emoji">🧮</div><h3>Lokes gåder – udregninger</h3>
+        <p>Gåder med udregninger og forklaringer.</p>
+        <span class="go">Åbn →</span></a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title"><span class="pill">🤝</span> Trivsel</div>
+    <div class="grid">
+      <a class="card triv" href="gruppedynamik.html"><span class="bar"></span>
+        <div class="emoji">💬</div><h3>Sammen i 4.C</h3>
+        <p>Om gruppedynamik og mobning – hvordan vi er gode ved hinanden.</p>
+        <span class="go">Åbn →</span></a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title"><span class="pill">🤸</span> Idræt</div>
+    <div class="grid">
+      <a class="card idr" href="parkour-video.html"><span class="bar"></span>
+        <div class="emoji">🎬</div><h3>Parkour-video</h3>
+        <p>Projekt for 6. årgang: lav jeres egen parkour-video.</p>
+        <span class="go">Åbn →</span></a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title"><span class="pill">🌱</span> Natur/teknologi</div>
+    <div class="grid">
+      <a class="card nat" href="domesticering.html"><span class="bar"></span>
+        <div class="emoji">🐴</div><h3>Domesticering</h3>
+        <p>Præsentation om hvordan dyr blev til husdyr.</p>
+        <span class="go">Åbn →</span></a>
+    </div>
+  </section>
+
+</div>
+
+<footer>Lavet til undervisningen · opdateres løbende</footer>
+</body>
+</html>

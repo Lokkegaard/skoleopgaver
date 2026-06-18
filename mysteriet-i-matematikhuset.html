@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mysteriet i Matematikhuset</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #e67e22;
+            --bg-color: #ecf0f1;
+            --text-color: #333;
+            --correct-color: #27ae60;
+            --wrong-color: #c0392b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2c3e50;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1505664194779-8beaceb93744?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .game-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            color: var(--text-color);
+            width: 90%;
+            max-width: 700px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .room-display {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background-color: #000;
+            overflow: hidden;
+        }
+
+        .room-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .room-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-sizing: border-box;
+        }
+
+        .content-area {
+            padding: 25px;
+        }
+
+        .story-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 5px solid var(--accent-color);
+            border-radius: 4px;
+        }
+
+        .math-problem {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        button.option-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button.option-btn:hover {
+            background-color: #34495e;
+            transform: translateY(-2px);
+        }
+
+        button.option-btn.correct {
+            background-color: var(--correct-color) !important;
+        }
+
+        button.option-btn.wrong {
+            background-color: var(--wrong-color) !important;
+            opacity: 0.6;
+        }
+
+        .feedback-area {
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            min-height: 24px;
+        }
+
+        .next-btn {
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: none; /* Hidden initially */
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background-color: #ddd;
+            width: 100%;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <div class="header">
+        <span>Matematikhuset</span>
+        <span id="score-display">Nøgle: 0/5</span>
+    </div>
+    
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+    </div>
+
+    <div class="room-display">
+        <img id="scene-img" class="room-image" src="" alt="Rummet">
+        <div class="room-title" id="room-name">Indgangen</div>
+    </div>
+
+    <div class="content-area">
+        <div class="story-text" id="story">
+            Velkommen! Huset er låst. Løs gåden for at komme ind.
+        </div>
+
+        <div class="math-problem" id="question">
+            Spørgsmålet kommer her...
+        </div>
+
+        <div class="options-grid" id="options">
+            </div>
+
+        <div class="feedback-area" id="feedback"></div>
+
+        <button class="next-btn" id="next-btn" onclick="nextRoom()">Gå til næste rum</button>
+    </div>
+</div>
+
+<script>
+    // Spillets data: Rum, historie, spørgsmål og billeder
+    const gameData = [
+        {
+            room: "Hoveddøren",
+            imageKeyword: "door,house,mystery",
+            story: "Du står foran det gamle hus. Døren er låst med en kodelås. Du ser husnummeret 156.",
+            question: "Koden er: Husnummeret plus 44, divideret med 2.",
+            options: [100, 200, 80, 122],
+            correct: 0, // Index 0 er det rigtige svar (100)
+            feedback: "Klik! Døren går op. (156 + 44 = 200. 200 / 2 = 100)."
+        },
+        {
+            room: "Entreen",
+            imageKeyword: "hallway,coatrack,interior",
+            story: "Du kommer ind i entreen. Der hænger en stumtjener med 8 knager. På hver knage hænger 3 jakker. Hver jakke har 2 lommer.",
+            question: "Hvor mange lommer er der i alt på alle jakkerne?",
+            options: [24, 13, 48, 36],
+            correct: 2, // 48
+            feedback: "Rigtigt! 8 knager x 3 jakker = 24 jakker. 24 x 2 lommer = 48."
+        },
+        {
+            room: "Køkkenet",
+            imageKeyword: "kitchen,cookies,old",
+            story: "I køkkenet dufter der brændt. På bordet står en krukke med 64 magiske småkager. 4 spøgelser vil dele dem lige.",
+            question: "Hvor mange småkager får hvert spøgelse?",
+            options: [12, 16, 14, 20],
+            correct: 1, // 16
+            feedback: "Mums! 64 divideret med 4 er 16."
+        },
+        {
+            room: "Biblioteket",
+            imageKeyword: "library,books,mystery",
+            story: "En gammel bog ligger åben. 'Jeg tænker på et tal', står der. 'Gang mig med 5 og træk 10 fra, så får du 40.'",
+            question: "Hvilket tal tænker bogen på?",
+            options: [8, 50, 6, 10],
+            correct: 3, // 10
+            feedback: "Korrekt! 10 x 5 = 50. 50 - 10 = 40."
+        },
+        {
+            room: "Tårnværelset",
+            imageKeyword: "stairs,tower,window",
+            story: "Du løber op ad trappen. Der er 100 trin. 15 er i stykker, og 7 mangler helt.",
+            question: "Hvor mange trin kan man træde sikkert på?",
+            options: [78, 85, 93, 22],
+            correct: 0, // 78
+            feedback: "Godt gået! 100 - 15 - 7 = 78 trin."
+        },
+        {
+            room: "Skattekammeret",
+            imageKeyword: "treasure,chest,gold",
+            story: "Du fandt skatten! Men for at åbne kisten skal du lægge fire tal på væggen sammen: 125, 250, 75 og 50.",
+            question: "Hvad er summen af tallene?",
+            options: [400, 500, 450, 525],
+            correct: 1, // 500
+            feedback: "Kisten åbner sig! Du har vundet! (125+75=200, 250+50=300, i alt 500)."
+        }
+    ];
+
+    let currentLevel = 0;
+    let score = 0;
+    let canClick = true;
+
+    // Element referencer
+    const imgEl = document.getElementById('scene-img');
+    const roomTitleEl = document.getElementById('room-name');
+    const storyEl = document.getElementById('story');
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const feedbackEl = document.getElementById('feedback');
+    const nextBtn = document.getElementById('next-btn');
+    const progressEl = document.getElementById('progress');
+    const scoreEl = document.getElementById('score-display');
+
+    function loadLevel(index) {
+        if (index >= gameData.length) {
+            endGame();
+            return;
+        }
+
+        const data = gameData[index];
+        
+        // Opdater UI
+        canClick = true;
+        nextBtn.style.display = "none";
+        feedbackEl.innerHTML = "";
+        feedbackEl.style.color = "inherit";
+        
+        roomTitleEl.innerText = data.room;
+        storyEl.innerText = data.story;
+        questionEl.innerText = data.question;
+        scoreEl.innerText = `Niv: ${index + 1}/${gameData.length}`;
+        
+        // Opdater progress bar
+        const percent = (index / gameData.length) * 100;
+        progressEl.style.width = percent + "%";
+
+        // Hent billede
+        // Vi bruger LoremFlickr eller Unsplash Source med keywords for at få et relevant billede
+        imgEl.src = `https://loremflickr.com/600/300/${data.imageKeyword}?random=${index}`;
+
+        // Generer knapper
+        optionsEl.innerHTML = "";
+        data.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(i, btn);
+            optionsEl.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedIndex, btnElement) {
+        if (!canClick) return;
+        canClick = false;
+
+        const data = gameData[currentLevel];
+        const buttons = document.querySelectorAll('.option-btn');
+
+        if (selectedIndex === data.correct) {
+            // Rigtigt svar
+            btnElement.classList.add('correct');
+            feedbackEl.innerText = data.feedback;
+            feedbackEl.style.color = "var(--correct-color)";
+            score++;
+            nextBtn.style.display = "block";
+        } else {
+            // Forkert svar
+            btnElement.classList.add('wrong');
+            buttons[data.correct].classList.add('correct'); // Vis det rigtige
+            feedbackEl.innerText = "Desværre forkert. Det rigtige svar er markeret.";
+            feedbackEl.style.color = "var(--wrong-color)";
+            nextBtn.style.display = "block";
+        }
+    }
+
+    function nextRoom() {
+        currentLevel++;
+        loadLevel(currentLevel);
+    }
+
+    function endGame() {
+        document.querySelector('.game-container').innerHTML = `
+            <div class="header">Tillykke!</div>
+            <div class="room-display">
+                <img class="room-image" src="https://loremflickr.com/600/300/fireworks" alt="Sejr">
+            </div>
+            <div class="content-area" style="text-align:center;">
+                <h2>Du gennemførte spillet!</h2>
+                <p>Du kom igennem alle rummene i Matematikhuset.</p>
+                <button class="next-btn" style="display:block;" onclick="location.reload()">Spil igen</button>
+            </div>
+        `;
+    }
+
+    // Start spillet
+    loadLevel(0);
+
+</script>
+
+</body>
+</html>

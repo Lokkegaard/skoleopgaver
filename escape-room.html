@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Byg et Escape Room i Delightex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#171327;
+    --bg2:#1f1933;
+    --panel:#262040;
+    --panel-soft:#2e2750;
+    --ink:#f4efe6;
+    --muted:#a89ec6;
+    --gold:#f0b84b;
+    --gold-soft:#ffd98a;
+    --green:#54d6a6;
+    --red:#ef6f56;
+    --line:#3a3360;
+    --shadow:0 18px 40px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:"Nunito",system-ui,sans-serif;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, #2a2150 0%, transparent 60%),
+      radial-gradient(900px 500px at 0% 110%, #221a3d 0%, transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif;line-height:1.1;margin:0}
+  .wrap{max-width:880px;margin:0 auto;padding:18px 18px 60px}
+
+  /* Top bar */
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 2px 14px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:"Baloo 2";font-weight:700;font-size:1.05rem;color:var(--gold-soft)}
+  .brand .lock{width:30px;height:30px;flex:0 0 auto}
+  .teacher-btn{
+    font-family:"Baloo 2";font-weight:600;font-size:.85rem;cursor:pointer;
+    background:transparent;color:var(--muted);border:1px solid var(--line);
+    padding:8px 14px;border-radius:999px;transition:.15s;
+  }
+  .teacher-btn:hover{color:var(--ink);border-color:var(--gold)}
+
+  /* Progress rail */
+  .rail{display:flex;gap:6px;align-items:center;margin:0 0 22px;flex-wrap:wrap}
+  .pip{
+    cursor:pointer;border:none;background:var(--panel);color:var(--muted);
+    width:38px;height:38px;border-radius:12px;font-family:"Baloo 2";font-weight:700;
+    display:flex;align-items:center;justify-content:center;font-size:.95rem;
+    border:1px solid var(--line);transition:.15s;position:relative;
+  }
+  .pip:hover{transform:translateY(-2px)}
+  .pip.done{background:linear-gradient(160deg,#2c5b4a,#22463a);color:var(--green);border-color:#356b56}
+  .pip.active{background:linear-gradient(160deg,var(--gold),#d89a2c);color:#2a1d05;border-color:var(--gold-soft);box-shadow:0 6px 16px rgba(240,184,75,.35)}
+
+  /* Card */
+  .card{
+    background:linear-gradient(180deg,var(--panel) 0%, var(--bg2) 100%);
+    border:1px solid var(--line);border-radius:22px;padding:30px 28px;
+    box-shadow:var(--shadow);position:relative;overflow:hidden;
+    animation:rise .35s ease both;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .eyebrow{font-family:"Baloo 2";font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    font-size:.72rem;color:var(--gold);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .eyebrow .num{background:var(--gold);color:#2a1d05;border-radius:8px;padding:2px 9px;font-size:.78rem}
+  .card h2{font-size:2rem;color:var(--ink);margin-bottom:6px}
+  .card .lead{font-size:1.08rem;color:var(--muted);margin:0 0 18px}
+  .card p{margin:0 0 12px}
+  .card strong{color:var(--gold-soft)}
+
+  /* Cover */
+  .cover h2{font-size:2.5rem;background:linear-gradient(90deg,var(--gold-soft),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .cover .keyhole{position:absolute;right:-30px;top:-30px;width:230px;height:230px;opacity:.10}
+  .how{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0 4px}
+  .how .step{background:var(--panel-soft);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+  .how .step .ic{font-size:1.6rem}
+  .how .step b{display:block;font-family:"Baloo 2";color:var(--gold-soft);margin-top:4px}
+  .how .step span{font-size:.9rem;color:var(--muted)}
+
+  /* Theme chips */
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 4px}
+  .chip{background:var(--panel-soft);border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-weight:700;font-family:"Baloo 2";font-size:.95rem}
+  .chip .ic{margin-right:6px}
+
+  /* Reveal */
+  .reveal{margin:14px 0}
+  .reveal>button{
+    width:100%;text-align:left;cursor:pointer;background:var(--panel-soft);
+    border:1px solid var(--line);color:var(--ink);border-radius:14px;
+    padding:13px 16px;font-family:"Baloo 2";font-weight:600;font-size:1rem;
+    display:flex;justify-content:space-between;align-items:center;gap:10px;transition:.15s;
+  }
+  .reveal>button:hover{border-color:var(--gold)}
+  .reveal>button .tw{transition:.2s;color:var(--gold)}
+  .reveal.open>button .tw{transform:rotate(45deg)}
+  .reveal .body{display:none;padding:14px 16px 4px;color:var(--muted)}
+  .reveal.open .body{display:block;animation:rise .25s ease both}
+
+  /* Math examples */
+  .ops{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0}
+  .op{background:var(--panel-soft);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .op .tag{font-family:"Baloo 2";font-weight:800;font-size:.95rem;display:inline-flex;align-items:center;gap:7px;padding:3px 10px;border-radius:8px;margin-bottom:8px}
+  .op.plus .tag{background:#2f4a6b;color:#9fd0ff}
+  .op.minus .tag{background:#5b3a2f;color:#ffc6a8}
+  .op.gange .tag{background:#3f2f5b;color:#d3b6ff}
+  .op.div .tag{background:#2f5b4a;color:#a8ffd9}
+  .op p{font-size:.97rem;margin:0 0 10px;color:var(--ink)}
+  .codebtn{cursor:pointer;background:transparent;border:1px dashed var(--gold);color:var(--gold);font-family:"Baloo 2";font-weight:700;border-radius:10px;padding:6px 12px;font-size:.88rem}
+  .codebtn.shown{background:var(--gold);color:#2a1d05;border-style:solid}
+
+  /* Rule banner */
+  .rule{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(120deg,#3a2f12,#2b240f);
+    border:1px solid #6a541f;border-radius:16px;padding:14px 16px;margin:8px 0 16px}
+  .rule .ic{font-size:1.4rem;line-height:1}
+  .rule b{font-family:"Baloo 2";color:var(--gold-soft)}
+
+  /* Mini blocks (CoBlocks look) */
+  .blocks{margin:8px 0}
+  .blk{border-radius:12px;padding:11px 14px;font-family:"Baloo 2";font-weight:700;color:#1a1322;margin:8px 0;font-size:.97rem;box-shadow:0 4px 0 rgba(0,0,0,.25)}
+  .blk.ev{background:#f5b94f}
+  .blk.ac{background:#7fb6ff}
+  .blk.ok{background:#6fe0ad}
+  .blk.no{background:#ff9c84}
+  .blk small{display:block;font-family:"Nunito";font-weight:700;color:#3a2c10;opacity:.75}
+
+  /* ordered substeps */
+  ol.flow{counter-reset:s;list-style:none;padding:0;margin:6px 0}
+  ol.flow li{position:relative;padding:10px 10px 10px 46px;margin:6px 0;background:var(--panel-soft);border:1px solid var(--line);border-radius:12px}
+  ol.flow li::before{counter-increment:s;content:counter(s);position:absolute;left:10px;top:50%;transform:translateY(-50%);
+    width:26px;height:26px;background:var(--gold);color:#2a1d05;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"Baloo 2";font-weight:800;font-size:.9rem}
+
+  /* path mapping */
+  .path{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+  .room{background:var(--panel-soft);border:1px solid var(--line);border-radius:12px;padding:10px 13px;text-align:center;min-width:96px}
+  .room b{display:block;font-family:"Baloo 2";color:var(--gold-soft)}
+  .room span{font-size:.85rem;color:var(--muted)}
+  .arrow{color:var(--gold);font-size:1.3rem}
+
+  /* checklist */
+  ul.check{list-style:none;padding:0;margin:6px 0}
+  ul.check li{display:flex;gap:12px;align-items:flex-start;padding:11px 14px;margin:8px 0;background:var(--panel-soft);border:1px solid var(--line);border-radius:12px;cursor:pointer;transition:.15s}
+  ul.check li:hover{border-color:var(--gold)}
+  ul.check li .box{flex:0 0 auto;width:24px;height:24px;border-radius:7px;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;font-weight:900;color:transparent;transition:.15s}
+  ul.check li.ticked{background:linear-gradient(120deg,#22463a,#1d3b31);border-color:#356b56}
+  ul.check li.ticked .box{background:var(--green);border-color:var(--green);color:#10251d}
+  ul.check li.ticked .lbl{color:var(--muted);text-decoration:line-through}
+
+  table.plan{width:100%;border-collapse:collapse;margin:8px 0;font-size:.95rem}
+  table.plan th,table.plan td{border:1px solid var(--line);padding:9px 11px;text-align:left}
+  table.plan th{background:var(--panel-soft);font-family:"Baloo 2";color:var(--gold-soft)}
+
+  /* Nav */
+  .nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+  .btn{cursor:pointer;font-family:"Baloo 2";font-weight:700;font-size:1rem;border-radius:14px;padding:13px 22px;border:1px solid var(--line);transition:.15s}
+  .btn.ghost{background:transparent;color:var(--muted)}
+  .btn.ghost:hover:not(:disabled){color:var(--ink);border-color:var(--gold)}
+  .btn.ghost:disabled{opacity:.3;cursor:default}
+  .btn.go{background:linear-gradient(160deg,var(--gold),#d89a2c);color:#2a1d05;border-color:var(--gold-soft);box-shadow:0 8px 18px rgba(240,184,75,.3)}
+  .btn.go:hover{transform:translateY(-2px)}
+  .hint{text-align:center;color:var(--muted);font-size:.82rem;margin-top:14px}
+  kbd{background:var(--panel-soft);border:1px solid var(--line);border-radius:6px;padding:1px 7px;font-family:inherit;font-size:.8rem}
+
+  /* Teacher panel */
+  .teacher{display:none;background:linear-gradient(180deg,#13261f,#0f1f1a);border:1px solid #2c5b4a;border-radius:18px;padding:22px 24px;margin-top:18px}
+  .teacher.show{display:block;animation:rise .3s ease both}
+  .teacher h3{color:var(--green);font-size:1.3rem;margin-bottom:6px}
+  .teacher h4{font-family:"Baloo 2";color:var(--gold-soft);margin:16px 0 4px;font-size:1rem}
+  .teacher p,.teacher li{color:#cfe8de}
+  .teacher ul{margin:4px 0;padding-left:20px}
+
+  @media(max-width:640px){
+    .wrap{padding:14px 13px 50px}
+    .card{padding:22px 18px;border-radius:18px}
+    .card h2{font-size:1.6rem}
+    .cover h2{font-size:1.9rem}
+    .how,.ops{grid-template-columns:1fr}
+    .pip{width:34px;height:34px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="#f0b84b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Escape Room i Delightex
+    </div>
+    <button class="teacher-btn" id="tBtn">Lærerinfo</button>
+  </div>
+
+  <div class="rail" id="rail"></div>
+
+  <div id="stage"></div>
+
+  <div class="nav">
+    <button class="btn ghost" id="prev">&larr; Tilbage</button>
+    <button class="btn go" id="next">Næste &rarr;</button>
+  </div>
+  <div class="hint">Brug piletasterne <kbd>&larr;</kbd> <kbd>&rarr;</kbd> eller knapperne til at skifte trin.</div>
+
+  <div class="teacher" id="teacher">
+    <h3>Til læreren</h3>
+    <p>Forløb hvor 4. klasse bygger et escape room med flere rum i Delightex (tidl. CoSpaces Edu). Hvert rum rummer én regnehistorie hvis svar er koden til næste dør. Eleverne arbejder i grupper på 2-3.</p>
+    <h4>Læringsmål</h4>
+    <ul>
+      <li>Anvende de fire regnearter i en meningsfuld sammenhæng.</li>
+      <li>Formulere egne tekstopgaver (regnehistorier) med ét entydigt svar.</li>
+      <li>Forstå sekvens og hændelser i blokkodning (CoBlocks): "når der klikkes ... så ...".</li>
+      <li>Samarbejde, planlægge og teste eget produkt.</li>
+    </ul>
+    <h4>Foreslået forløb (ca. 4-5 lektioner)</h4>
+    <ul>
+      <li>Lektion 1: Vælg tema, planlæg på papir, skriv regnehistorier (trin 1-4).</li>
+      <li>Lektion 2-3: Byg rum og kod låse i Delightex (trin 5-7).</li>
+      <li>Lektion 4: Test og ret fejl (trin 8).</li>
+      <li>Lektion 5: Grupperne spiller hinandens escape rooms (trin 9).</li>
+    </ul>
+    <h4>Differentiering</h4>
+    <ul>
+      <li>Usikre grupper: 3 rum, mindre tal, evt. udleverede regnehistorier, dør-lås ved klik på rigtigt tal.</li>
+      <li>Stærke grupper: flere rum, en variabel der tæller klik i rigtig rækkefølge, eller et kode-tastatur.</li>
+    </ul>
+    <h4>Evaluering</h4>
+    <ul>
+      <li>Tjek at alle fire regnearter optræder mindst én gang, og at hver kode matcher svaret.</li>
+      <li>Lad grupperne spille hinandens rum: kan de regne sig ud?</li>
+    </ul>
+    <h4>Tip</h4>
+    <p>Udlevér gerne en papirskabelon med kolonnerne Rum / Regneart / Regnehistorie / Kode, så planlægningen er på plads før eleverne åbner programmet.</p>
+  </div>
+
+</div>
+
+<script>
+const steps = [
+  /* 0 COVER */
+  `<div class="card cover">
+    <svg class="keyhole" viewBox="0 0 24 24" fill="#f0b84b"><path d="M12 2a7 7 0 0 0-3 13.3V20a3 3 0 0 0 6 0v-4.7A7 7 0 0 0 12 2zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/></svg>
+    <div class="eyebrow">Jeres opgave</div>
+    <h2>Byg jeres eget Escape Room</h2>
+    <p class="lead">Et matematik-mysterium med flere rum i Delightex.</p>
+    <p>I skal bygge et escape room hvor man kun kan komme videre ved at regne. I hvert rum gemmer der sig en <strong>regnehistorie</strong>. Når man regner den rigtigt, får man en <strong>kode</strong> der åbner døren til næste rum. Sidste rum er målet: så er man sluppet ud!</p>
+    <div class="how">
+      <div class="step"><div class="ic">🧩</div><b>Tema</b><span>Vælg ét tema til alle rum</span></div>
+      <div class="step"><div class="ic">➗</div><b>Regnehistorier</b><span>Brug alle 4 regnearter</span></div>
+      <div class="step"><div class="ic">🚪</div><b>Byg & kod</b><span>Lav rum og låse i Delightex</span></div>
+    </div>
+    <p style="margin-top:16px">I arbejder i grupper. Følg de 8 trin. Klik <strong>Næste</strong> for at starte.</p>
+  </div>`,
+
+  /* 1 THEME */
+  `<div class="card">
+    <div class="eyebrow"><span class="num">Trin 1</span> Vælg jeres tema</div>
+    <h2>Find ét fælles tema</h2>
+    <p class="lead">Det samme tema skal gå igen i ALLE jeres rum.</p>
+    <p>Bliv enige i gruppen om ét tema. Så hænger hele jeres escape room sammen som én historie.</p>
+    <div class="chips">
+      <span class="chip"><span class="ic">🚀</span>Rumstation</span>
+      <span class="chip"><span class="ic">🏺</span>Pyramide i Egypten</span>
+      <span class="chip"><span class="ic">🌴</span>Junglens tempel</span>
+      <span class="chip"><span class="ic">👻</span>Spøgelsesslot</span>
+      <span class="chip"><span class="ic">🐠</span>Under havet</span>
+    </div>
+    <div class="reveal"><button>Hvorfor samme tema hele vejen? <span class="tw">+</span></button>
+      <div class="body">Hvis rum 1 er en rumstation og rum 2 er en jungle, bliver det rodet. Samme tema gør jeres escape room flot og let at forstå. I rumstationen kan rummene fx hedde: <strong>Kontrolrummet → Maskinrummet → Flugtkapslen</strong>.</div>
+    </div>
+  </div>`,
+
+  /* 2 PLAN */
+  `<div class="card">
+    <div class="eyebrow"><span class="num">Trin 2</span> Planlæg på papir</div>
+    <h2>Tegn jeres plan først</h2>
+    <p class="lead">Lav planen på papir FØR I åbner Delightex. Det sparer en masse tid.</p>
+    <p>Bestem i gruppen:</p>
+    <ol class="flow">
+      <li>Hvor mange rum? <strong>3-4 rum er passende.</strong></li>
+      <li>Hvad er der i hvert rum? (genstande, døre, en seddel med opgaven)</li>
+      <li>Vejen igennem: Rum 1 → Rum 2 → Rum 3 → ud.</li>
+      <li>Hvilken regnehistorie og hvilken kode hører til hver dør.</li>
+    </ol>
+    <table class="plan">
+      <tr><th>Rum</th><th>Hvad sker der</th><th>Regneart</th><th>Kode (svar)</th></tr>
+      <tr><td>1</td><td>Kontrolrummet</td><td>Plus +</td><td>33</td></tr>
+      <tr><td>2</td><td>Maskinrummet</td><td>Minus −</td><td>45</td></tr>
+      <tr><td>3</td><td>Flugtkapslen</td><td>Gange ×</td><td>35</td></tr>
+    </table>
+    <div class="reveal"><button>Tip til planlægning <span class="tw">+</span></button>
+      <div class="body">Start med 3 rum. I kan altid tilføje et fjerde senere. Skriv jeres koder ned med det samme, så I husker dem når I bygger.</div>
+    </div>
+  </div>`,
+
+  /* 3 MATH */
+  `<div class="card">
+    <div class="eyebrow"><span class="num">Trin 3</span> Lav jeres regnehistorier</div>
+    <h2>En opgave til hver dør</h2>
+    <p class="lead">Koden til en dør er svaret på en regnehistorie.</p>
+    <div class="rule"><div class="ic">📏</div><div><b>Reglen:</b> I skal bruge alle fire regnearter mindst én gang i jeres escape room: plus (+), minus (−), gange (×) og division (÷).</div></div>
+    <p>Her er fire eksempler fra rumstation-temaet. Klik for at se koden:</p>
+    <div class="ops">
+      <div class="op plus"><span class="tag">＋ Plus</span><p>På Dæk A er der 14 rumdragter og på Dæk B er der 19. Hvor mange rumdragter er der i alt?</p><button class="codebtn">Se koden</button></div>
+      <div class="op minus"><span class="tag">－ Minus</span><p>Iltbeholderen havde 80 liter ilt. Robotten brugte 35 liter. Hvor meget er der tilbage?</p><button class="codebtn">Se koden</button></div>
+      <div class="op gange"><span class="tag">✕ Gange</span><p>Der er 5 rækker med solpaneler. I hver række er der 7 paneler. Hvor mange paneler er der i alt?</p><button class="codebtn">Se koden</button></div>
+      <div class="op div"><span class="tag">÷ Division</span><p>54 nødrationer skal deles ligeligt mellem 6 astronauter. Hvor mange får hver?</p><button class="codebtn">Se koden</button></div>
+    </div>
+    <div class="reveal"><button>Sådan laver I en god regnehistorie <span class="tw">+</span></button>
+      <div class="body">Brug tal der passer til jeres tema. Hold spørgsmålet kort. Der skal kun være ét rigtigt svar. Regn selv opgaven og skriv svaret ned: det er jeres kode.</div>
+    </div>
+  </div>`,
+
+  /* 4 BUILD ROOM 1 */
+  `<div class="card">
+    <div class="eyebrow"><span class="num">Trin 4</span> Byg det første rum</div>
+    <h2>Åbn Delightex og byg rum 1</h2>
+    <p class="lead">Nu går I fra papir til skærm.</p>
+    <ol class="flow">
+      <li>Log ind i Delightex og opret et nyt CoSpace.</li>
+      <li>Vælg en baggrund eller et miljø der passer til jeres tema.</li>
+      <li>Hent genstande fra biblioteket (Library) og placér dem i rummet.</li>
+      <li>Sæt et <strong>skilt eller en seddel</strong> med jeres regnehistorie.</li>
+      <li>Tilføj nogle <strong>døre eller genstande man kan klikke på</strong>: én rigtig og et par forkerte.</li>
+    </ol>
+    <div class="reveal"><button>Tip: hold det enkelt <span class="tw">+</span></button>
+      <div class="body">Brug få genstande pr. rum. Så bliver det ikke for tungt at bygge, og det kører hurtigere når man spiller.</div>
+    </div>
+  </div>`,
+
+  /* 5 COBLOCKS */
+  `<div class="card">
+    <div class="eyebrow"><span class="num">Trin 5</span> Få det til at virke med kode</div>
+    <h2>Kod låsen i CoBlocks</h2>
+    <p class="lead">I CoBlocks får tingene til at reagere når man klikker.</p>
+    <p>Klik på <strong>Kode</strong> og vælg CoBlocks. Træk klodser ud og sæt dem sammen sådan her:</p>
+    <p style="margin:14px 0 4px"><strong>1. Vis opgaven</strong></p>
+    <div class="blocks">
+      <div class="blk ev">Når <u>skiltet</u> klikkes <small>(hændelse)</small></div>
+      <div class="blk ac">vis infopanel med jeres regnehistorie <small>(handling)</small></div>
+    </div>
+    <p style="margin:14px 0 4px"><strong>2. Lav låsen</strong></p>
+    <div class="blocks">
+      <div class="blk ev">Når <u>den rigtige dør</u> klikkes</div>
+      <div class="blk ok">gå til Scene 2 <small>(videre til næste rum)</small></div>
+      <div class="blk ev">Når <u>en forkert dør</u> klikkes</div>
+      <div class="blk no">vis infopanel: "Forkert tal, prøv igen"</div>
+    </div>
+    <div class="reveal"><button>Den nemme måde at lave en lås <span class="tw">+</span></button>
+      <div class="body">Sæt 3-4 genstande med tal i rummet. Den genstand der har det <strong>rigtige svar</strong>, fører til næste rum. De andre giver beskeden "prøv igen". Så behøver I ikke skrive tal ind.</div>
+    </div>
+    <div class="reveal"><button>Vil I have en udfordring? <span class="tw">+</span></button>
+      <div class="body">Lav et kode-tastatur: spilleren skal klikke på tallene i koden i rigtig rækkefølge. Det kræver en <strong>variabel</strong> der husker hvad der er klikket. Spørg læreren hvis I vil prøve.</div>
+    </div>
+  </div>`,
+
+  /* 6 MORE ROOMS */
+  `<div class="card">
+    <div class="eyebrow"><span class="num">Trin 6</span> Byg flere rum</div>
+    <h2>Bind rummene sammen</h2>
+    <p class="lead">Lav en ny Scene for hvert rum. Husk det samme tema.</p>
+    <p>Reglen er enkel: <strong>ét rum = én scene = én regnehistorie = én regneart.</strong> Forbind scenerne med klodsen <strong>"gå til scene"</strong>.</p>
+    <div class="path">
+      <div class="room"><b>Rum 1</b><span>Plus → 33</span></div><span class="arrow">→</span>
+      <div class="room"><b>Rum 2</b><span>Minus → 45</span></div><span class="arrow">→</span>
+      <div class="room"><b>Rum 3</b><span>Gange → 35</span></div><span class="arrow">→</span>
+      <div class="room"><b>Rum 4</b><span>Division → 9</span></div>
+    </div>
+    <div class="rule"><div class="ic">✅</div><div><b>Tjek:</b> Har I brugt alle fire regnearter? Plus, minus, gange OG division skal være med.</div></div>
+  </div>`,
+
+  /* 7 TEST */
+  `<div class="card">
+    <div class="eyebrow"><span class="num">Trin 7</span> Test og ret fejl</div>
+    <h2>Spil jeres eget rum</h2>
+    <p class="lead">Tryk Afspil og prøv jeres escape room helt fra start.</p>
+    <p>Tjek for de typiske fejl:</p>
+    <ol class="flow">
+      <li>Åbner den rigtige dør? Og kun den?</li>
+      <li>Kan man læse regnehistorien?</li>
+      <li>Passer koden med svaret?</li>
+      <li>Kan man komme hele vejen igennem uden at sidde fast?</li>
+    </ol>
+    <div class="reveal"><button>Sidder I fast? <span class="tw">+</span></button>
+      <div class="body">Tjek jeres klodser i CoBlocks: er hændelsen koblet på den rigtige genstand? Spørg en anden gruppe, eller spørg læreren. Det er helt normalt at skulle rette flere gange.</div>
+    </div>
+  </div>`,
+
+  /* 8 DONE */
+  `<div class="card">
+    <div class="eyebrow"><span class="num">Trin 8</span> Færdig</div>
+    <h2>Prøv hinandens escape rooms 🎉</h2>
+    <p class="lead">Tillykke! Nu bytter I og spiller de andre gruppers rum.</p>
+    <p>Kan I regne jer ud af de andres mysterier? Sæt kryds når jeres eget escape room er klart:</p>
+    <ul class="check">
+      <li><span class="box">✓</span><span class="lbl">Vi har valgt ét tema og brugt det i alle rum</span></li>
+      <li><span class="box">✓</span><span class="lbl">Vi har mindst 3 rum</span></li>
+      <li><span class="box">✓</span><span class="lbl">Vi har brugt plus, minus, gange og division</span></li>
+      <li><span class="box">✓</span><span class="lbl">Hver dør har en kode der passer til svaret</span></li>
+      <li><span class="box">✓</span><span class="lbl">Vi har testet at alt virker fra start til slut</span></li>
+      <li><span class="box">✓</span><span class="lbl">En anden gruppe kan spille det</span></li>
+    </ul>
+  </div>`
+];
+
+const codes = ["33","45","35","9"];
+
+const stage = document.getElementById('stage');
+const rail = document.getElementById('rail');
+const prevB = document.getElementById('prev');
+const nextB = document.getElementById('next');
+let i = 0;
+let visited = new Set([0]);
+
+function buildRail(){
+  rail.innerHTML='';
+  steps.forEach((_,idx)=>{
+    const b=document.createElement('button');
+    b.className='pip';
+    b.textContent = idx===0 ? '★' : idx;
+    b.onclick=()=>go(idx);
+    rail.appendChild(b);
+  });
+}
+function paintRail(){
+  [...rail.children].forEach((p,idx)=>{
+    p.classList.toggle('active',idx===i);
+    p.classList.toggle('done',idx!==i && visited.has(idx));
+  });
+}
+function wire(){
+  // reveals
+  stage.querySelectorAll('.reveal>button').forEach(btn=>{
+    btn.onclick=()=>btn.parentElement.classList.toggle('open');
+  });
+  // code buttons
+  let ci=0;
+  stage.querySelectorAll('.codebtn').forEach((btn,idx)=>{
+    const code=codes[idx];
+    btn.onclick=()=>{
+      if(btn.classList.contains('shown')) return;
+      btn.classList.add('shown');
+      btn.textContent='Kode: '+code;
+    };
+  });
+  // checklist
+  stage.querySelectorAll('ul.check li').forEach(li=>{
+    li.onclick=()=>li.classList.toggle('ticked');
+  });
+}
+function go(n){
+  i=Math.max(0,Math.min(steps.length-1,n));
+  visited.add(i);
+  stage.innerHTML=steps[i];
+  wire();
+  prevB.disabled = i===0;
+  nextB.textContent = i===steps.length-1 ? 'Forfra ↺' : 'Næste →';
+  paintRail();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+prevB.onclick=()=>go(i-1);
+nextB.onclick=()=>{ if(i===steps.length-1){go(0);} else {go(i+1);} };
+document.addEventListener('keydown',e=>{
+  if(e.target.closest('button')) return;
+  if(e.key==='ArrowRight') go(i+1);
+  if(e.key==='ArrowLeft') go(i-1);
+});
+document.getElementById('tBtn').onclick=()=>{
+  const t=document.getElementById('teacher');
+  t.classList.toggle('show');
+  if(t.classList.contains('show')) t.scrollIntoView({behavior:'smooth'});
+};
+
+buildRail();
+go(0);
+</script>
+</body>
+</html>
