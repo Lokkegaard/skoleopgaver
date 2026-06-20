@@ -47,7 +47,7 @@
   }
   .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
     gap:18px;
   }
   .card{
@@ -65,13 +65,20 @@
   }
   .card:hover{transform:translateY(-6px);box-shadow:0 14px 28px rgba(31,42,68,.16)}
   .card h3{font-size:1.2rem;margin-bottom:8px}
-  .card p{color:var(--muted);font-size:.95rem;flex-grow:1}
-  .card .go{margin-top:18px;font-weight:700;font-size:.95rem}
+  .card p{color:var(--muted);font-size:.95rem}
+  .card .teach{
+    margin-top:12px;padding-top:12px;
+    border-top:1px solid #eef1f8;
+    font-size:.88rem;color:var(--ink);
+    flex-grow:1;
+  }
+  .card .teach b{color:var(--ink)}
+  .card .go{margin-top:16px;font-weight:700;font-size:.95rem}
   .card .bar{position:absolute;top:0;left:0;width:100%;height:6px}
-  .mat .badge{background:var(--mat)} .mat .bar{background:var(--mat)} .mat:hover{border-color:var(--mat)} .mat .go{color:var(--mat)}
-  .triv .badge{background:var(--triv)} .triv .bar{background:var(--triv)} .triv:hover{border-color:var(--triv)} .triv .go{color:var(--triv)}
-  .idr .badge{background:var(--idr)} .idr .bar{background:var(--idr)} .idr:hover{border-color:var(--idr)} .idr .go{color:var(--idr)}
-  .nat .badge{background:var(--nat)} .nat .bar{background:var(--nat)} .nat:hover{border-color:var(--nat)} .nat .go{color:var(--nat)}
+  .mat .badge{background:var(--mat)} .mat .bar{background:var(--mat)} .mat:hover{border-color:var(--mat)} .mat .go{color:var(--mat)} .mat .teach b{color:var(--mat)}
+  .triv .badge{background:var(--triv)} .triv .bar{background:var(--triv)} .triv:hover{border-color:var(--triv)} .triv .go{color:var(--triv)} .triv .teach b{color:var(--triv)}
+  .idr .badge{background:var(--idr)} .idr .bar{background:var(--idr)} .idr:hover{border-color:var(--idr)} .idr .go{color:var(--idr)} .idr .teach b{color:var(--idr)}
+  .nat .badge{background:var(--nat)} .nat .bar{background:var(--nat)} .nat:hover{border-color:var(--nat)} .nat .go{color:var(--nat)} .nat .teach b{color:var(--nat)}
   footer{text-align:center;color:var(--muted);font-size:.9rem;padding:30px 20px 50px}
   @media(max-width:520px){header h1{font-size:2rem}}
 </style>
@@ -90,26 +97,32 @@
       <a class="card mat" href="escape-room.html"><span class="bar"></span>
         <h3>Regne-Escape Room</h3>
         <p>Løs regnehistorier og find vej ud, rum for rum.</p>
-        <span class="go">Spil →</span></a>
+        <p class="teach"><b>Til læreren:</b> Projektforløb hvor eleverne i grupper selv bygger et escape room med regnehistorier. Træner de fire regnearter, problemløsning og samarbejde.</p>
+        <span class="go">Åbn →</span></a>
       <a class="card mat" href="mysteriet-om-4c.html"><span class="bar"></span>
         <h3>Mysteriet i Det Gamle Hus</h3>
         <p>Detektivspil: find de rigtige spor og løs regnestykkerne.</p>
+        <p class="teach"><b>Til læreren:</b> Selvstændig aktivitet, der træner hovedregning og læseforståelse. Justerbar sværhedsgrad – god til opvarmning eller differentieret arbejde.</p>
         <span class="go">Spil →</span></a>
       <a class="card mat" href="mysteriet-i-matematikhuset.html"><span class="bar"></span>
         <h3>Mysteriet i Matematikhuset</h3>
         <p>Kom igennem husets rum ved at svare rigtigt.</p>
+        <p class="teach"><b>Til læreren:</b> Selvrettende quiz med tekststykker i alle fire regnearter. Velegnet til stationsarbejde eller individuel træning.</p>
         <span class="go">Spil →</span></a>
       <a class="card mat" href="matematikspil.html"><span class="bar"></span>
         <h3>Matematikspil</h3>
         <p>Digitalt matematikspil til at træne regning.</p>
+        <p class="teach"><b>Til læreren:</b> Træner plus, minus og store tal med stigende sværhedsgrad og pointsystem. God til 10 minutters daglig træning.</p>
         <span class="go">Spil →</span></a>
       <a class="card mat" href="math-dice-adventure.html"><span class="bar"></span>
         <h3>Math Dice Adventure</h3>
         <p>Terningespil hvor du regner dig videre.</p>
+        <p class="teach"><b>Til læreren:</b> Eleverne danner selv regnestykker med terninger i alle fire regnearter. Træner talforståelse og er nem at differentiere.</p>
         <span class="go">Spil →</span></a>
       <a class="card mat" href="lokes-gaader-udregninger.html"><span class="bar"></span>
         <h3>Lokes gåder – udregninger</h3>
         <p>Gåder med udregninger og forklaringer.</p>
+        <p class="teach"><b>Til læreren:</b> Regnegåder med trinvise udregninger og forklaringer. Brug på smartboard til fælles gennemgang eller som facit/selvkontrol.</p>
         <span class="go">Åbn →</span></a>
     </div>
   </section>
@@ -120,6 +133,7 @@
       <a class="card triv" href="gruppedynamik.html"><span class="bar"></span>
         <h3>Sammen i klassen</h3>
         <p>Om gruppedynamik og mobning – hvordan vi er gode ved hinanden.</p>
+        <p class="teach"><b>Til læreren:</b> Oplæg til klassens tid og trivselsarbejde. Sætter ramme om samtale om gruppedynamik, mobning og fællesskab.</p>
         <span class="go">Åbn →</span></a>
     </div>
   </section>
@@ -130,6 +144,7 @@
       <a class="card idr" href="parkour-video.html"><span class="bar"></span>
         <h3>Parkour-video</h3>
         <p>Lav jeres egen parkour-video.</p>
+        <p class="teach"><b>Til læreren:</b> Rammesætter et projektforløb i idræt, hvor eleverne planlægger, filmer og redigerer en parkour-video i grupper.</p>
         <span class="go">Åbn →</span></a>
     </div>
   </section>
@@ -140,6 +155,7 @@
       <a class="card nat" href="domesticering.html"><span class="bar"></span>
         <h3>Domesticering</h3>
         <p>Præsentation om hvordan dyr blev til husdyr.</p>
+        <p class="teach"><b>Til læreren:</b> Præsentation til klasseundervisning som intro til emnet domesticering. Vises på smartboard med spørgsmål undervejs.</p>
         <span class="go">Åbn →</span></a>
     </div>
   </section>
