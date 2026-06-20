@@ -9,11 +9,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#f5f4ef;
+    --paper:#f4f2f7;
     --card:#ffffff;
-    --ink:#1a1c20;
-    --muted:#6c7077;
-    --line:#e6e2d8;
+    --ink:#1c1726;
+    --muted:#6b6675;
+    --line:#e4e0ec;
+    --plum:#5b21b6;
+    --plum-deep:#3b0764;
+    --plum-soft:#ede7fb;
     --mat:#dd5a2e;
     --triv:#0f9b8d;
     --idr:#2f6df0;
@@ -25,27 +28,45 @@
   html{scroll-behavior:smooth}
   body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
 
-  /* top bar */
+  /* top bar – bærende lilla */
   .topbar{
     position:sticky;top:0;z-index:30;
-    background:rgba(245,244,239,.85);backdrop-filter:saturate(140%) blur(8px);
-    border-bottom:1px solid var(--line);
+    background:var(--plum-deep);color:#fff;
     display:flex;align-items:center;justify-content:space-between;
-    padding:14px 28px;
+    padding:14px 28px;box-shadow:0 2px 12px rgba(59,7,100,.25);
   }
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.01em}
-  .brand .dot{width:14px;height:14px;border-radius:4px;background:var(--mat);transform:rotate(12deg)}
-  .brand small{display:block;font-weight:500;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-  .meta{font-size:.82rem;color:var(--muted);letter-spacing:.04em}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.01em;color:#fff}
+  .brand .dot{width:15px;height:15px;border-radius:5px;background:#c4b5fd;transform:rotate(12deg)}
+  .brand small{display:block;font-weight:500;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#cdbdf2}
+  .meta{font-size:.82rem;color:#cdbdf2;letter-spacing:.04em}
 
   /* hero */
-  .hero{max-width:1080px;margin:0 auto;padding:64px 28px 28px}
-  .hero .kicker{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mat);font-weight:600;margin-bottom:14px}
+  .hero{max-width:1080px;margin:0 auto;padding:60px 28px 18px}
+  .hero .kicker{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--plum);font-weight:600;margin-bottom:14px}
   .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.4rem,5vw,3.8rem);line-height:1.04;letter-spacing:-.02em;max-width:16ch}
-  .hero p{margin-top:18px;max-width:56ch;color:#43474d;font-size:1.08rem}
+  .hero h1 em{font-style:italic;color:var(--plum)}
+  .hero p{margin-top:18px;max-width:56ch;color:#403a4b;font-size:1.08rem}
 
-  .wrap{max-width:1080px;margin:0 auto;padding:20px 28px 70px}
-  .section{margin-top:46px}
+  /* søgefelt */
+  .searchwrap{max-width:1080px;margin:0 auto;padding:14px 28px 0}
+  .search{position:relative;max-width:520px}
+  .search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--plum);pointer-events:none}
+  .search input{
+    width:100%;font-family:var(--sans);font-size:1rem;color:var(--ink);
+    padding:14px 44px 14px 46px;border:1.5px solid var(--line);border-radius:12px;background:#fff;
+    transition:border-color .15s ease,box-shadow .15s ease;
+  }
+  .search input::placeholder{color:#9b95a8}
+  .search input:focus{outline:none;border-color:var(--plum);box-shadow:0 0 0 4px rgba(91,33,182,.15)}
+  .search .clear{
+    position:absolute;right:8px;top:50%;transform:translateY(-50%);
+    border:none;background:transparent;color:var(--muted);font-size:1.2rem;cursor:pointer;
+    width:30px;height:30px;border-radius:8px;display:none;line-height:1;
+  }
+  .search .clear:hover{background:var(--plum-soft);color:var(--plum)}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:14px 28px 70px}
+  .section{margin-top:40px}
   .section-head{display:flex;align-items:baseline;gap:12px;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--line)}
   .section-head .sdot{width:11px;height:11px;border-radius:50%}
   .section-head h2{font-family:var(--serif);font-weight:600;font-size:1.5rem;letter-spacing:-.01em}
@@ -56,30 +77,32 @@
     position:relative;display:flex;flex-direction:column;
     background:var(--card);border:1px solid var(--line);border-radius:12px;
     padding:22px 22px 20px 26px;text-decoration:none;color:inherit;
-    transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;
-    overflow:hidden;
+    transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;overflow:hidden;
   }
   .card .stripe{position:absolute;left:0;top:0;bottom:0;width:5px}
-  .card:hover{transform:translateY(-4px);box-shadow:0 16px 30px -14px rgba(26,28,32,.28)}
+  .card:hover{transform:translateY(-4px);box-shadow:0 18px 34px -16px rgba(59,7,100,.4);border-color:var(--plum)}
   .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
   .card h3{font-family:var(--serif);font-weight:600;font-size:1.22rem;line-height:1.2;letter-spacing:-.01em}
   .tag{flex:none;font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
   .lead{color:var(--muted);font-size:.93rem}
-  .teach{margin-top:13px;padding-top:13px;border-top:1px dashed var(--line);font-size:.9rem;color:#3c4046;flex-grow:1}
-  .teach .lbl{display:block;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
-  .go{margin-top:16px;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:.92rem}
+  .teach{margin-top:13px;padding-top:13px;border-top:1px dashed var(--line);font-size:.9rem;color:#3c3646;flex-grow:1}
+  .teach .lbl{display:block;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;color:var(--plum)}
+  .go{margin-top:16px;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:.92rem;color:var(--plum)}
   .go .arr{transition:transform .16s ease}
   .card:hover .go .arr{transform:translateX(4px)}
 
-  /* per-subject accents */
-  .mat .stripe{background:var(--mat)} .mat:hover{border-color:var(--mat)} .mat .tag{background:#fbe7df;color:#b8431d} .mat .go,.mat .teach .lbl,.mat .sdot{color:var(--mat)} .mat .sdot{background:var(--mat)}
-  .triv .stripe{background:var(--triv)} .triv:hover{border-color:var(--triv)} .triv .tag{background:#d8f1ee;color:#0a6f65} .triv .go,.triv .teach .lbl{color:var(--triv)} .triv .sdot{background:var(--triv)}
-  .idr .stripe{background:var(--idr)} .idr:hover{border-color:var(--idr)} .idr .tag{background:#dfe8fd;color:#2350c2} .idr .go,.idr .teach .lbl{color:var(--idr)} .idr .sdot{background:var(--idr)}
-  .nat .stripe{background:var(--nat)} .nat:hover{border-color:var(--nat)} .nat .tag{background:#dcf0e2;color:#2c7a43} .nat .go,.nat .teach .lbl{color:var(--nat)} .nat .sdot{background:var(--nat)}
+  /* fag-markører (lille stribe + chip) */
+  .mat .stripe{background:var(--mat)} .mat .tag{background:#fbe7df;color:#b8431d} .mat .sdot{background:var(--mat)}
+  .triv .stripe{background:var(--triv)} .triv .tag{background:#d8f1ee;color:#0a6f65} .triv .sdot{background:var(--triv)}
+  .idr .stripe{background:var(--idr)} .idr .tag{background:#dfe8fd;color:#2350c2} .idr .sdot{background:var(--idr)}
+  .nat .stripe{background:var(--nat)} .nat .tag{background:#dcf0e2;color:#2c7a43} .nat .sdot{background:var(--nat)}
+
+  .empty{display:none;text-align:center;color:var(--muted);padding:50px 20px;font-size:1.05rem}
+  .empty b{color:var(--ink)}
 
   footer{border-top:1px solid var(--line);margin-top:30px}
   footer .inner{max-width:1080px;margin:0 auto;padding:26px 28px;color:var(--muted);font-size:.86rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-  @media(max-width:600px){.hero{padding-top:40px}.topbar{padding:12px 18px}.hero,.wrap{padding-left:18px;padding-right:18px}}
+  @media(max-width:600px){.hero{padding-top:40px}.topbar{padding:12px 18px}.hero,.wrap,.searchwrap{padding-left:18px;padding-right:18px}}
 </style>
 </head>
 <body>
@@ -91,9 +114,17 @@
 
 <header class="hero">
   <div class="kicker">Til læreren</div>
-  <h1>Interaktive materialer, klar til timen</h1>
+  <h1>Interaktive materialer, <em>klar til timen</em></h1>
   <p>En samling spil, opgaver og oplæg du frit kan bruge i undervisningen. Hvert materiale har en kort note om, hvad det egner sig til – så du hurtigt kan finde det rigtige.</p>
 </header>
+
+<div class="searchwrap">
+  <div class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <input id="q" type="search" placeholder="Søg i materialer – fag, titel eller emne …" aria-label="Søg i materialer" autocomplete="off">
+    <button class="clear" id="clear" aria-label="Ryd søgning">×</button>
+  </div>
+</div>
 
 <div class="wrap">
 
@@ -173,8 +204,36 @@
     </div>
   </section>
 
+  <div class="empty" id="empty">Ingen materialer matcher <b id="emptyq"></b>. Prøv et andet søgeord.</div>
+
 </div>
 
 <footer><div class="inner"><span>Skoleopgaver · lavet til undervisningen</span><span>Opdateres løbende</span></div></footer>
+
+<script>
+  (function(){
+    var q=document.getElementById('q'),clear=document.getElementById('clear');
+    var empty=document.getElementById('empty'),emptyq=document.getElementById('emptyq');
+    var cards=[].slice.call(document.querySelectorAll('.card'));
+    var sections=[].slice.call(document.querySelectorAll('.section'));
+    function norm(s){return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');}
+    function run(){
+      var t=norm(q.value.trim());
+      clear.style.display=q.value?'block':'none';
+      cards.forEach(function(c){
+        c.style.display=(!t||norm(c.textContent).indexOf(t)>-1)?'':'none';
+      });
+      var any=false;
+      sections.forEach(function(s){
+        var vis=[].slice.call(s.querySelectorAll('.card')).some(function(c){return c.style.display!=='none';});
+        s.style.display=vis?'':'none'; if(vis)any=true;
+      });
+      empty.style.display=any?'none':'block';
+      emptyq.textContent='"'+q.value.trim()+'"';
+    }
+    q.addEventListener('input',run);
+    clear.addEventListener('click',function(){q.value='';run();q.focus();});
+  })();
+</script>
 </body>
 </html>
