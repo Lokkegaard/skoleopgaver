@@ -9,60 +9,34 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#f4f2f7;
-    --card:#ffffff;
-    --ink:#1c1726;
-    --muted:#6b6675;
-    --line:#e4e0ec;
-    --plum:#5b21b6;
-    --plum-deep:#3b0764;
-    --plum-soft:#ede7fb;
-    --mat:#dd5a2e;
-    --triv:#0f9b8d;
-    --idr:#2f6df0;
-    --nat:#3a9d57;
-    --sans:'Outfit',system-ui,-apple-system,sans-serif;
-    --serif:'Fraunces',Georgia,serif;
+    --paper:#f4f2f7;--card:#ffffff;--ink:#1c1726;--muted:#6b6675;--line:#e4e0ec;
+    --plum:#5b21b6;--plum-deep:#3b0764;--plum-soft:#ede7fb;
+    --mat:#dd5a2e;--triv:#0f9b8d;--idr:#2f6df0;--nat:#3a9d57;
+    --sans:'Outfit',system-ui,-apple-system,sans-serif;--serif:'Fraunces',Georgia,serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
 
-  /* top bar – bærende lilla */
-  .topbar{
-    position:sticky;top:0;z-index:30;
-    background:var(--plum-deep);color:#fff;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:14px 28px;box-shadow:0 2px 12px rgba(59,7,100,.25);
-  }
+  .topbar{position:sticky;top:0;z-index:30;background:var(--plum-deep);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:14px 28px;box-shadow:0 2px 12px rgba(59,7,100,.25)}
   .brand{display:flex;align-items:center;gap:11px;font-weight:700;letter-spacing:-.01em;color:#fff}
   .brand .dot{width:15px;height:15px;border-radius:5px;background:#c4b5fd;transform:rotate(12deg)}
   .brand small{display:block;font-weight:500;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#cdbdf2}
   .meta{font-size:.82rem;color:#cdbdf2;letter-spacing:.04em}
 
-  /* hero */
   .hero{max-width:1080px;margin:0 auto;padding:60px 28px 18px}
   .hero .kicker{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--plum);font-weight:600;margin-bottom:14px}
   .hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.4rem,5vw,3.8rem);line-height:1.04;letter-spacing:-.02em;max-width:16ch}
   .hero h1 em{font-style:italic;color:var(--plum)}
   .hero p{margin-top:18px;max-width:56ch;color:#403a4b;font-size:1.08rem}
 
-  /* søgefelt */
   .searchwrap{max-width:1080px;margin:0 auto;padding:14px 28px 0}
   .search{position:relative;max-width:520px}
-  .search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--plum);pointer-events:none}
-  .search input{
-    width:100%;font-family:var(--sans);font-size:1rem;color:var(--ink);
-    padding:14px 44px 14px 46px;border:1.5px solid var(--line);border-radius:12px;background:#fff;
-    transition:border-color .15s ease,box-shadow .15s ease;
-  }
+  .search>svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--plum);pointer-events:none}
+  .search input{width:100%;font-family:var(--sans);font-size:1rem;color:var(--ink);padding:14px 44px 14px 46px;border:1.5px solid var(--line);border-radius:12px;background:#fff;transition:border-color .15s,box-shadow .15s}
   .search input::placeholder{color:#9b95a8}
   .search input:focus{outline:none;border-color:var(--plum);box-shadow:0 0 0 4px rgba(91,33,182,.15)}
-  .search .clear{
-    position:absolute;right:8px;top:50%;transform:translateY(-50%);
-    border:none;background:transparent;color:var(--muted);font-size:1.2rem;cursor:pointer;
-    width:30px;height:30px;border-radius:8px;display:none;line-height:1;
-  }
+  .search .clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:none;background:transparent;color:var(--muted);font-size:1.2rem;cursor:pointer;width:30px;height:30px;border-radius:8px;display:none;line-height:1}
   .search .clear:hover{background:var(--plum-soft);color:var(--plum)}
 
   .wrap{max-width:1080px;margin:0 auto;padding:14px 28px 70px}
@@ -73,33 +47,28 @@
   .section-head .count{margin-left:auto;font-size:.82rem;color:var(--muted);letter-spacing:.04em}
 
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
-  .card{
-    position:relative;display:flex;flex-direction:column;
-    background:var(--card);border:1px solid var(--line);border-radius:12px;
-    padding:22px 22px 20px 26px;text-decoration:none;color:inherit;
-    transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;overflow:hidden;
-  }
-  .card .stripe{position:absolute;left:0;top:0;bottom:0;width:5px}
+  .card{position:relative;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:14px;text-decoration:none;color:inherit;transition:transform .16s,box-shadow .16s,border-color .16s;overflow:hidden}
   .card:hover{transform:translateY(-4px);box-shadow:0 18px 34px -16px rgba(59,7,100,.4);border-color:var(--plum)}
+  .thumb{height:120px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line)}
+  .thumb svg{width:52px;height:52px}
+  .body{display:flex;flex-direction:column;flex-grow:1;padding:18px 20px 18px}
   .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
-  .card h3{font-family:var(--serif);font-weight:600;font-size:1.22rem;line-height:1.2;letter-spacing:-.01em}
+  .card h3{font-family:var(--serif);font-weight:600;font-size:1.2rem;line-height:1.2;letter-spacing:-.01em}
   .tag{flex:none;font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:999px;white-space:nowrap}
   .lead{color:var(--muted);font-size:.93rem}
   .teach{margin-top:13px;padding-top:13px;border-top:1px dashed var(--line);font-size:.9rem;color:#3c3646;flex-grow:1}
   .teach .lbl{display:block;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;color:var(--plum)}
   .go{margin-top:16px;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:.92rem;color:var(--plum)}
-  .go .arr{transition:transform .16s ease}
+  .go .arr{transition:transform .16s}
   .card:hover .go .arr{transform:translateX(4px)}
 
-  /* fag-markører (lille stribe + chip) */
-  .mat .stripe{background:var(--mat)} .mat .tag{background:#fbe7df;color:#b8431d} .mat .sdot{background:var(--mat)}
-  .triv .stripe{background:var(--triv)} .triv .tag{background:#d8f1ee;color:#0a6f65} .triv .sdot{background:var(--triv)}
-  .idr .stripe{background:var(--idr)} .idr .tag{background:#dfe8fd;color:#2350c2} .idr .sdot{background:var(--idr)}
-  .nat .stripe{background:var(--nat)} .nat .tag{background:#dcf0e2;color:#2c7a43} .nat .sdot{background:var(--nat)}
+  .mat .thumb{background:#fbe7df} .mat .thumb svg{color:var(--mat)} .mat .tag{background:#fbe7df;color:#b8431d} .mat .sdot{background:var(--mat)}
+  .triv .thumb{background:#d8f1ee} .triv .thumb svg{color:var(--triv)} .triv .tag{background:#d8f1ee;color:#0a6f65} .triv .sdot{background:var(--triv)}
+  .idr .thumb{background:#dfe8fd} .idr .thumb svg{color:var(--idr)} .idr .tag{background:#dfe8fd;color:#2350c2} .idr .sdot{background:var(--idr)}
+  .nat .thumb{background:#dcf0e2} .nat .thumb svg{color:var(--nat)} .nat .tag{background:#dcf0e2;color:#2c7a43} .nat .sdot{background:var(--nat)}
 
   .empty{display:none;text-align:center;color:var(--muted);padding:50px 20px;font-size:1.05rem}
   .empty b{color:var(--ink)}
-
   footer{border-top:1px solid var(--line);margin-top:30px}
   footer .inner{max-width:1080px;margin:0 auto;padding:26px 28px;color:var(--muted);font-size:.86rem;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
   @media(max-width:600px){.hero{padding-top:40px}.topbar{padding:12px 18px}.hero,.wrap,.searchwrap{padding-left:18px;padding-right:18px}}
@@ -132,41 +101,59 @@
     <div class="section-head"><span class="sdot" style="background:var(--mat)"></span><h2>Matematik</h2><span class="count">6 materialer</span></div>
     <div class="grid">
 
-      <a class="card mat" href="escape-room.html"><span class="stripe"></span>
-        <div class="card-top"><h3>Regne-Escape Room</h3><span class="tag">Matematik</span></div>
-        <p class="lead">Løs regnehistorier og find vej ud, rum for rum.</p>
-        <p class="teach"><span class="lbl">Til læreren</span>Projektforløb hvor eleverne i grupper selv bygger et escape room med regnehistorier. Træner de fire regnearter, problemløsning og samarbejde.</p>
-        <span class="go">Åbn materiale <span class="arr">→</span></span></a>
+      <a class="card mat" href="escape-room.html">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.2" r="1.3" fill="currentColor" stroke="none"/><line x1="12" y1="15.6" x2="12" y2="17.4"/></svg></div>
+        <div class="body">
+          <div class="card-top"><h3>Regne-Escape Room</h3><span class="tag">Matematik</span></div>
+          <p class="lead">Løs regnehistorier og find vej ud, rum for rum.</p>
+          <p class="teach"><span class="lbl">Til læreren</span>Projektforløb hvor eleverne i grupper selv bygger et escape room med regnehistorier. Træner de fire regnearter, problemløsning og samarbejde.</p>
+          <span class="go">Åbn materiale <span class="arr">→</span></span>
+        </div></a>
 
-      <a class="card mat" href="mysteriet-om-4c.html"><span class="stripe"></span>
-        <div class="card-top"><h3>Mysteriet i Det Gamle Hus</h3><span class="tag">Matematik</span></div>
-        <p class="lead">Detektivspil: find de rigtige spor og løs regnestykkerne.</p>
-        <p class="teach"><span class="lbl">Til læreren</span>Selvstændig aktivitet, der træner hovedregning og læseforståelse. Justerbar sværhedsgrad – god til opvarmning eller differentieret arbejde.</p>
-        <span class="go">Åbn materiale <span class="arr">→</span></span></a>
+      <a class="card mat" href="mysteriet-om-4c.html">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><circle cx="10.5" cy="10.5" r="2.4"/><line x1="20.5" y1="20.5" x2="15" y2="15"/></svg></div>
+        <div class="body">
+          <div class="card-top"><h3>Mysteriet i Det Gamle Hus</h3><span class="tag">Matematik</span></div>
+          <p class="lead">Detektivspil: find de rigtige spor og løs regnestykkerne.</p>
+          <p class="teach"><span class="lbl">Til læreren</span>Selvstændig aktivitet, der træner hovedregning og læseforståelse. Justerbar sværhedsgrad – god til opvarmning eller differentieret arbejde.</p>
+          <span class="go">Åbn materiale <span class="arr">→</span></span>
+        </div></a>
 
-      <a class="card mat" href="mysteriet-i-matematikhuset.html"><span class="stripe"></span>
-        <div class="card-top"><h3>Mysteriet i Matematikhuset</h3><span class="tag">Matematik</span></div>
-        <p class="lead">Kom igennem husets rum ved at svare rigtigt.</p>
-        <p class="teach"><span class="lbl">Til læreren</span>Selvrettende quiz med tekststykker i alle fire regnearter. Velegnet til stationsarbejde eller individuel træning.</p>
-        <span class="go">Åbn materiale <span class="arr">→</span></span></a>
+      <a class="card mat" href="mysteriet-i-matematikhuset.html">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-6 8 6"/><path d="M6 10v9h12v-9"/><rect x="10.2" y="13.5" width="3.6" height="5.5"/></svg></div>
+        <div class="body">
+          <div class="card-top"><h3>Mysteriet i Matematikhuset</h3><span class="tag">Matematik</span></div>
+          <p class="lead">Kom igennem husets rum ved at svare rigtigt.</p>
+          <p class="teach"><span class="lbl">Til læreren</span>Selvrettende quiz med tekststykker i alle fire regnearter. Velegnet til stationsarbejde eller individuel træning.</p>
+          <span class="go">Åbn materiale <span class="arr">→</span></span>
+        </div></a>
 
-      <a class="card mat" href="matematikspil.html"><span class="stripe"></span>
-        <div class="card-top"><h3>Matematikspil</h3><span class="tag">Matematik</span></div>
-        <p class="lead">Digitalt matematikspil til at træne regning.</p>
-        <p class="teach"><span class="lbl">Til læreren</span>Træner plus, minus og store tal med stigende sværhedsgrad og pointsystem. God til 10 minutters daglig træning.</p>
-        <span class="go">Åbn materiale <span class="arr">→</span></span></a>
+      <a class="card mat" href="matematikspil.html">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2.8 1.7 4.2 4.6 4.2 8 0 1.9-.6 3.7-1.6 5.2H9.4C8.4 14.7 7.8 12.9 7.8 11c0-3.4 1.4-6.3 4.2-8z"/><circle cx="12" cy="10" r="1.6"/><path d="M9.4 16.5l-2.2 3 3-.9M14.6 16.5l2.2 3-3-.9"/></svg></div>
+        <div class="body">
+          <div class="card-top"><h3>Matematikspil</h3><span class="tag">Matematik</span></div>
+          <p class="lead">Digitalt matematikspil til at træne regning.</p>
+          <p class="teach"><span class="lbl">Til læreren</span>Træner plus, minus og store tal med stigende sværhedsgrad og pointsystem. God til 10 minutters daglig træning.</p>
+          <span class="go">Åbn materiale <span class="arr">→</span></span>
+        </div></a>
 
-      <a class="card mat" href="math-dice-adventure.html"><span class="stripe"></span>
-        <div class="card-top"><h3>Math Dice Adventure</h3><span class="tag">Matematik</span></div>
-        <p class="lead">Terningespil hvor du regner dig videre.</p>
-        <p class="teach"><span class="lbl">Til læreren</span>Eleverne danner selv regnestykker med terninger i alle fire regnearter. Træner talforståelse og er nem at differentiere.</p>
-        <span class="go">Åbn materiale <span class="arr">→</span></span></a>
+      <a class="card mat" href="math-dice-adventure.html">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="9.5" height="9.5" rx="2"/><rect x="12.5" y="4.2" width="8.5" height="8.5" rx="2" fill="#fff"/><circle cx="5.6" cy="11.6" r="1" fill="currentColor" stroke="none"/><circle cx="9.9" cy="15.9" r="1" fill="currentColor" stroke="none"/><circle cx="7.75" cy="13.75" r="1" fill="currentColor" stroke="none"/><circle cx="15.3" cy="7" r="1" fill="currentColor" stroke="none"/><circle cx="18.2" cy="9.9" r="1" fill="currentColor" stroke="none"/></svg></div>
+        <div class="body">
+          <div class="card-top"><h3>Math Dice Adventure</h3><span class="tag">Matematik</span></div>
+          <p class="lead">Terningespil hvor du regner dig videre.</p>
+          <p class="teach"><span class="lbl">Til læreren</span>Eleverne danner selv regnestykker med terninger i alle fire regnearter. Træner talforståelse og er nem at differentiere.</p>
+          <span class="go">Åbn materiale <span class="arr">→</span></span>
+        </div></a>
 
-      <a class="card mat" href="lokes-gaader-udregninger.html"><span class="stripe"></span>
-        <div class="card-top"><h3>Lokes gåder – udregninger</h3><span class="tag">Matematik</span></div>
-        <p class="lead">Gåder med udregninger og forklaringer.</p>
-        <p class="teach"><span class="lbl">Til læreren</span>Regnegåder med trinvise udregninger og forklaringer. Brug på smartboard til fælles gennemgang eller som facit/selvkontrol.</p>
-        <span class="go">Åbn materiale <span class="arr">→</span></span></a>
+      <a class="card mat" href="lokes-gaader-udregninger.html">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0-3.8 10.6c.6.5.9 1.2.9 2v.4h5.8v-.4c0-.8.3-1.5.9-2A6 6 0 0 0 12 3z"/><line x1="9.5" y1="19" x2="14.5" y2="19"/><line x1="10.5" y1="21" x2="13.5" y2="21"/></svg></div>
+        <div class="body">
+          <div class="card-top"><h3>Lokes gåder – udregninger</h3><span class="tag">Matematik</span></div>
+          <p class="lead">Gåder med udregninger og forklaringer.</p>
+          <p class="teach"><span class="lbl">Til læreren</span>Regnegåder med trinvise udregninger og forklaringer. Brug på smartboard til fælles gennemgang eller som facit/selvkontrol.</p>
+          <span class="go">Åbn materiale <span class="arr">→</span></span>
+        </div></a>
 
     </div>
   </section>
@@ -174,33 +161,42 @@
   <section class="section" id="trivsel">
     <div class="section-head"><span class="sdot" style="background:var(--triv)"></span><h2>Trivsel</h2><span class="count">1 materiale</span></div>
     <div class="grid">
-      <a class="card triv" href="gruppedynamik.html"><span class="stripe"></span>
-        <div class="card-top"><h3>Sammen i klassen</h3><span class="tag">Trivsel</span></div>
-        <p class="lead">Om gruppedynamik og mobning – hvordan vi er gode ved hinanden.</p>
-        <p class="teach"><span class="lbl">Til læreren</span>Oplæg til klassens tid og trivselsarbejde. Sætter ramme om samtale om gruppedynamik, mobning og fællesskab.</p>
-        <span class="go">Åbn materiale <span class="arr">→</span></span></a>
+      <a class="card triv" href="gruppedynamik.html">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="9" r="2.6"/><circle cx="15.5" cy="9.5" r="2.2"/><path d="M3.8 18.2c0-2.6 2.1-4.4 4.7-4.4 1.4 0 2.7.5 3.5 1.4"/><path d="M13.5 14c.6-.2 1.3-.3 2-.3 2.4 0 4.3 1.7 4.3 4.5"/></svg></div>
+        <div class="body">
+          <div class="card-top"><h3>Sammen i klassen</h3><span class="tag">Trivsel</span></div>
+          <p class="lead">Om gruppedynamik og mobning – hvordan vi er gode ved hinanden.</p>
+          <p class="teach"><span class="lbl">Til læreren</span>Oplæg til klassens tid og trivselsarbejde. Sætter ramme om samtale om gruppedynamik, mobning og fællesskab.</p>
+          <span class="go">Åbn materiale <span class="arr">→</span></span>
+        </div></a>
     </div>
   </section>
 
   <section class="section" id="idraet">
     <div class="section-head"><span class="sdot" style="background:var(--idr)"></span><h2>Idræt</h2><span class="count">1 materiale</span></div>
     <div class="grid">
-      <a class="card idr" href="parkour-video.html"><span class="stripe"></span>
-        <div class="card-top"><h3>Parkour-video</h3><span class="tag">Idræt</span></div>
-        <p class="lead">Lav jeres egen parkour-video.</p>
-        <p class="teach"><span class="lbl">Til læreren</span>Rammesætter et projektforløb i idræt, hvor eleverne planlægger, filmer og redigerer en parkour-video i grupper.</p>
-        <span class="go">Åbn materiale <span class="arr">→</span></span></a>
+      <a class="card idr" href="parkour-video.html">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="M16 10.2l4.5-2.6v8.8L16 13.8"/><path d="M7.5 9.3l4.2 2.7-4.2 2.7z" fill="currentColor" stroke="none"/></svg></div>
+        <div class="body">
+          <div class="card-top"><h3>Parkour-video</h3><span class="tag">Idræt</span></div>
+          <p class="lead">Lav jeres egen parkour-video.</p>
+          <p class="teach"><span class="lbl">Til læreren</span>Rammesætter et projektforløb i idræt, hvor eleverne planlægger, filmer og redigerer en parkour-video i grupper.</p>
+          <span class="go">Åbn materiale <span class="arr">→</span></span>
+        </div></a>
     </div>
   </section>
 
   <section class="section" id="natur">
     <div class="section-head"><span class="sdot" style="background:var(--nat)"></span><h2>Natur/teknologi</h2><span class="count">1 materiale</span></div>
     <div class="grid">
-      <a class="card nat" href="domesticering.html"><span class="stripe"></span>
-        <div class="card-top"><h3>Domesticering</h3><span class="tag">Natur/tek</span></div>
-        <p class="lead">Præsentation om hvordan dyr blev til husdyr.</p>
-        <p class="teach"><span class="lbl">Til læreren</span>Præsentation til klasseundervisning som intro til emnet domesticering. Vises på smartboard med spørgsmål undervejs.</p>
-        <span class="go">Åbn materiale <span class="arr">→</span></span></a>
+      <a class="card nat" href="domesticering.html">
+        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15.5c0-1.9 1.4-3.2 3-3.2s3 1.3 3 3.2-1.3 3.3-3 3.3-3-1.4-3-3.3z" fill="currentColor" stroke="none"/><circle cx="7" cy="10.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="10" cy="8" r="1.5" fill="currentColor" stroke="none"/><circle cx="14" cy="8" r="1.5" fill="currentColor" stroke="none"/><circle cx="17" cy="10.5" r="1.5" fill="currentColor" stroke="none"/></svg></div>
+        <div class="body">
+          <div class="card-top"><h3>Domesticering</h3><span class="tag">Natur/tek</span></div>
+          <p class="lead">Præsentation om hvordan dyr blev til husdyr.</p>
+          <p class="teach"><span class="lbl">Til læreren</span>Præsentation til klasseundervisning som intro til emnet domesticering. Vises på smartboard med spørgsmål undervejs.</p>
+          <span class="go">Åbn materiale <span class="arr">→</span></span>
+        </div></a>
     </div>
   </section>
 
@@ -220,9 +216,7 @@
     function run(){
       var t=norm(q.value.trim());
       clear.style.display=q.value?'block':'none';
-      cards.forEach(function(c){
-        c.style.display=(!t||norm(c.textContent).indexOf(t)>-1)?'':'none';
-      });
+      cards.forEach(function(c){c.style.display=(!t||norm(c.textContent).indexOf(t)>-1)?'':'none';});
       var any=false;
       sections.forEach(function(s){
         var vis=[].slice.call(s.querySelectorAll('.card')).some(function(c){return c.style.display!=='none';});
