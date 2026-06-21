@@ -6,6 +6,7 @@
 <title>Skoleopgaver – undervisningsmaterialer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -49,8 +50,9 @@
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
   .card{position:relative;display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:14px;text-decoration:none;color:inherit;transition:transform .16s,box-shadow .16s,border-color .16s;overflow:hidden}
   .card:hover{transform:translateY(-4px);box-shadow:0 18px 34px -16px rgba(59,7,100,.4);border-color:var(--plum)}
-  .thumb{height:120px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--line)}
-  .thumb svg{width:52px;height:52px}
+  .thumb{position:relative;height:150px;overflow:hidden;border-bottom:1px solid var(--line)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+  .card:hover .thumb img{transform:scale(1.05)}
   .body{display:flex;flex-direction:column;flex-grow:1;padding:18px 20px 18px}
   .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
   .card h3{font-family:var(--serif);font-weight:600;font-size:1.2rem;line-height:1.2;letter-spacing:-.01em}
@@ -62,10 +64,10 @@
   .go .arr{transition:transform .16s}
   .card:hover .go .arr{transform:translateX(4px)}
 
-  .mat .thumb{background:#fbe7df} .mat .thumb svg{color:var(--mat)} .mat .tag{background:#fbe7df;color:#b8431d} .mat .sdot{background:var(--mat)}
-  .triv .thumb{background:#d8f1ee} .triv .thumb svg{color:var(--triv)} .triv .tag{background:#d8f1ee;color:#0a6f65} .triv .sdot{background:var(--triv)}
-  .idr .thumb{background:#dfe8fd} .idr .thumb svg{color:var(--idr)} .idr .tag{background:#dfe8fd;color:#2350c2} .idr .sdot{background:var(--idr)}
-  .nat .thumb{background:#dcf0e2} .nat .thumb svg{color:var(--nat)} .nat .tag{background:#dcf0e2;color:#2c7a43} .nat .sdot{background:var(--nat)}
+  .mat .thumb{background:#fbe7df} .mat .tag{background:#fbe7df;color:#b8431d} .mat .sdot{background:var(--mat)}
+  .triv .thumb{background:#d8f1ee} .triv .tag{background:#d8f1ee;color:#0a6f65} .triv .sdot{background:var(--triv)}
+  .idr .thumb{background:#dfe8fd} .idr .tag{background:#dfe8fd;color:#2350c2} .idr .sdot{background:var(--idr)}
+  .nat .thumb{background:#dcf0e2} .nat .tag{background:#dcf0e2;color:#2c7a43} .nat .sdot{background:var(--nat)}
 
   .empty{display:none;text-align:center;color:var(--muted);padding:50px 20px;font-size:1.05rem}
   .empty b{color:var(--ink)}
@@ -102,7 +104,7 @@
     <div class="grid">
 
       <a class="card mat" href="escape-room.html">
-        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.2" r="1.3" fill="currentColor" stroke="none"/><line x1="12" y1="15.6" x2="12" y2="17.4"/></svg></div>
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&w=600&h=340&q=70" alt="Hængelås" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
         <div class="body">
           <div class="card-top"><h3>Regne-Escape Room</h3><span class="tag">Matematik</span></div>
           <p class="lead">Løs regnehistorier og find vej ud, rum for rum.</p>
@@ -111,7 +113,7 @@
         </div></a>
 
       <a class="card mat" href="mysteriet-om-4c.html">
-        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6"/><circle cx="10.5" cy="10.5" r="2.4"/><line x1="20.5" y1="20.5" x2="15" y2="15"/></svg></div>
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1586769852836-bc069f19e1b6?auto=format&fit=crop&w=600&h=340&q=70" alt="Forstørrelsesglas" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
         <div class="body">
           <div class="card-top"><h3>Mysteriet i Det Gamle Hus</h3><span class="tag">Matematik</span></div>
           <p class="lead">Detektivspil: find de rigtige spor og løs regnestykkerne.</p>
@@ -120,7 +122,7 @@
         </div></a>
 
       <a class="card mat" href="mysteriet-i-matematikhuset.html">
-        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-6 8 6"/><path d="M6 10v9h12v-9"/><rect x="10.2" y="13.5" width="3.6" height="5.5"/></svg></div>
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1635372722656-389f87a941b7?auto=format&fit=crop&w=600&h=340&q=70" alt="Matematik" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
         <div class="body">
           <div class="card-top"><h3>Mysteriet i Matematikhuset</h3><span class="tag">Matematik</span></div>
           <p class="lead">Kom igennem husets rum ved at svare rigtigt.</p>
@@ -129,7 +131,7 @@
         </div></a>
 
       <a class="card mat" href="matematikspil.html">
-        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c2.8 1.7 4.2 4.6 4.2 8 0 1.9-.6 3.7-1.6 5.2H9.4C8.4 14.7 7.8 12.9 7.8 11c0-3.4 1.4-6.3 4.2-8z"/><circle cx="12" cy="10" r="1.6"/><path d="M9.4 16.5l-2.2 3 3-.9M14.6 16.5l2.2 3-3-.9"/></svg></div>
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=600&h=340&q=70" alt="Tal og matematik" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
         <div class="body">
           <div class="card-top"><h3>Matematikspil</h3><span class="tag">Matematik</span></div>
           <p class="lead">Digitalt matematikspil til at træne regning.</p>
@@ -138,7 +140,7 @@
         </div></a>
 
       <a class="card mat" href="math-dice-adventure.html">
-        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="9.5" height="9.5" rx="2"/><rect x="12.5" y="4.2" width="8.5" height="8.5" rx="2" fill="#fff"/><circle cx="5.6" cy="11.6" r="1" fill="currentColor" stroke="none"/><circle cx="9.9" cy="15.9" r="1" fill="currentColor" stroke="none"/><circle cx="7.75" cy="13.75" r="1" fill="currentColor" stroke="none"/><circle cx="15.3" cy="7" r="1" fill="currentColor" stroke="none"/><circle cx="18.2" cy="9.9" r="1" fill="currentColor" stroke="none"/></svg></div>
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1551431009-a802eeec77b1?auto=format&fit=crop&w=600&h=340&q=70" alt="Terninger" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
         <div class="body">
           <div class="card-top"><h3>Math Dice Adventure</h3><span class="tag">Matematik</span></div>
           <p class="lead">Terningespil hvor du regner dig videre.</p>
@@ -147,7 +149,7 @@
         </div></a>
 
       <a class="card mat" href="lokes-gaader-udregninger.html">
-        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0-3.8 10.6c.6.5.9 1.2.9 2v.4h5.8v-.4c0-.8.3-1.5.9-2A6 6 0 0 0 12 3z"/><line x1="9.5" y1="19" x2="14.5" y2="19"/><line x1="10.5" y1="21" x2="13.5" y2="21"/></svg></div>
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1730804518415-75297e8d2a41?auto=format&fit=crop&w=600&h=340&q=70" alt="Puslespil" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
         <div class="body">
           <div class="card-top"><h3>Lokes gåder – udregninger</h3><span class="tag">Matematik</span></div>
           <p class="lead">Gåder med udregninger og forklaringer.</p>
@@ -162,7 +164,7 @@
     <div class="section-head"><span class="sdot" style="background:var(--triv)"></span><h2>Trivsel</h2><span class="count">1 materiale</span></div>
     <div class="grid">
       <a class="card triv" href="gruppedynamik.html">
-        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="9" r="2.6"/><circle cx="15.5" cy="9.5" r="2.2"/><path d="M3.8 18.2c0-2.6 2.1-4.4 4.7-4.4 1.4 0 2.7.5 3.5 1.4"/><path d="M13.5 14c.6-.2 1.3-.3 2-.3 2.4 0 4.3 1.7 4.3 4.5"/></svg></div>
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=600&h=340&q=70" alt="Samarbejde" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
         <div class="body">
           <div class="card-top"><h3>Sammen i klassen</h3><span class="tag">Trivsel</span></div>
           <p class="lead">Om gruppedynamik og mobning – hvordan vi er gode ved hinanden.</p>
@@ -176,7 +178,7 @@
     <div class="section-head"><span class="sdot" style="background:var(--idr)"></span><h2>Idræt</h2><span class="count">1 materiale</span></div>
     <div class="grid">
       <a class="card idr" href="parkour-video.html">
-        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="M16 10.2l4.5-2.6v8.8L16 13.8"/><path d="M7.5 9.3l4.2 2.7-4.2 2.7z" fill="currentColor" stroke="none"/></svg></div>
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1554889914-a5c84570ea3e?auto=format&fit=crop&w=600&h=340&q=70" alt="Parkour" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
         <div class="body">
           <div class="card-top"><h3>Parkour-video</h3><span class="tag">Idræt</span></div>
           <p class="lead">Lav jeres egen parkour-video.</p>
@@ -190,7 +192,7 @@
     <div class="section-head"><span class="sdot" style="background:var(--nat)"></span><h2>Natur/teknologi</h2><span class="count">1 materiale</span></div>
     <div class="grid">
       <a class="card nat" href="domesticering.html">
-        <div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15.5c0-1.9 1.4-3.2 3-3.2s3 1.3 3 3.2-1.3 3.3-3 3.3-3-1.4-3-3.3z" fill="currentColor" stroke="none"/><circle cx="7" cy="10.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="10" cy="8" r="1.5" fill="currentColor" stroke="none"/><circle cx="14" cy="8" r="1.5" fill="currentColor" stroke="none"/><circle cx="17" cy="10.5" r="1.5" fill="currentColor" stroke="none"/></svg></div>
+        <div class="thumb"><img src="https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=600&h=340&q=70" alt="Hest" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></div>
         <div class="body">
           <div class="card-top"><h3>Domesticering</h3><span class="tag">Natur/tek</span></div>
           <p class="lead">Præsentation om hvordan dyr blev til husdyr.</p>
@@ -204,7 +206,7 @@
 
 </div>
 
-<footer><div class="inner"><span>Skoleopgaver · lavet til undervisningen</span><span>Opdateres løbende</span></div></footer>
+<footer><div class="inner"><span>Skoleopgaver · lavet til undervisningen</span><span>Fotos: Unsplash</span></div></footer>
 
 <script>
   (function(){
